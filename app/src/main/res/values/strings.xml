@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Legal</string>
+    <string name="getpost">访问失败</string>
+    <string name="loadFile">上传失败</string>
+    <string name="downFile">下载失败</string>
+    <string name="registration_failed_without_permission">Registration failed, without permission!</string>
+    <string name="Registration_failed">Registration failed</string>
+    <string name="open_failed">不能打开文档</string>
+</resources>
