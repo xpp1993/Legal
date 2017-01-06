@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.svn/
+easeUI_CN/build/intermediates/bundles/release/res/drawable-xhdpi-v4/ease_chat_press_speak_btn_pressed.9.png
+easeUI_CN/build/intermediates/res/merged/androidTest/debug/drawable/ease_chat_press_speak_btn.xml
+easeUI_CN/build/
+android-pdf-viewer/build/
+.idea/
+gradle/
