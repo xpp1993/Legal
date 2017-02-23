@@ -34,9 +34,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/NoActionBar">
+        android:theme="@style/AppTheme">
         <!--登录页面-->
-        <activity android:name=".activity.LoginActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/activityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,19 +46,34 @@
             </intent-filter>
         </activity>
         <!--注册页面-->
-        <!--<activity android:name=".activity.RegistActivity"/>-->
+        <activity android:name=".activity.RegistActivity" />
+        <activity android:name=".activity.IDRegistActivity" />
+        <!--手机快捷登录页面-->
+        <activity android:name=".activity.FastActivity" />
+        <!--找回密码页面-->
+        <activity android:name=".activity.ForgetPassWordActivity" />
         <!--主页-->
         <activity
-            android:name=".main.MainActivity"
-            android:launchMode="singleTask"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <!--注册页面-->
-        <activity android:name=".activity.RegisterActivity" />
+        <!--设置页面-->
+        <activity android:name=".activity.SheZhiActivity" />
+        <!--个人页面-->
+        <activity android:name=".activity.SelfActivity" />
         <!--聊天页面-->
-        <activity android:name=".activity.ChatActivity" />
         <!--展示pdf文件的界面-->
         <activity android:name=".activity.PDFDetailActivity" />
+        <!--修改绑定手机号页面-->
+        <activity android:name=".activity.BindPhoneActivity" />
+        <!--意见反馈页面-->
+        <activity android:name=".activity.FeedBackActivity" />
+        <!--关于我们-->
+        <activity android:name=".activity.AboutActivity" />
+        <!--修改密码页面-->
+        <activity android:name=".activity.ChangePwActivity" />
+        <!--修改个人信息页面-->
+        <activity android:name=".activity.ChangeActivity" />
         <!-- 声明环信SDK所需的service SDK核心功能-->
         <service
             android:name="com.hyphenate.chat.EMChatService"

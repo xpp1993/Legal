@@ -6,5 +6,5 @@
         android:right="15dp"
         android:top="15dp"
         android:bottom="15dp" />
-    <solid android:color="@color/bar" />
+    <solid android:color="@color/color_transparent" />
 </shape>

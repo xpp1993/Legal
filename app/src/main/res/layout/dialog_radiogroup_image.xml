@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <RadioGroup
+        android:id="@+id/dialog_radiogroup_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/dialog_radiogroup_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:text="相册"
+            android:checked="true"
+            android:textColor="@color/color_white" />
+
+        <RadioButton
+            android:id="@+id/dialog_radiogroup_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相机"
+            android:textColor="@color/color_white" />
+    </RadioGroup>
+
+</LinearLayout>

@@ -1,45 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
-    <EditText
-        android:id="@+id/et_username"
+
+    <include layout="@layout/bar2" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="用户名"
+        android:layout_marginTop="70dp">
+        <!--
+        1.siRadius corner radius in dp
+        2.siSquare set width and height to the minimum of the given values true|false-->
+        <com.github.siyamed.shapeimageview.RoundedImageView
+            android:layout_width="98dp"
+            android:layout_height="98dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/beijing"
+            app:siRadius="10dp"
+            app:siSquare="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="37dp"
+        android:background="@color/color_white">
+
+        <LinearLayout
+            android:id="@+id/login_phone_ll"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/user" />
+
+            <EditText
+                android:id="@+id/login_phone_et"
+                style="@style/CommonStyle.input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorPrimary"
+                android:hint="请输入用户名/手机号码" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/login_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/login_phone_ll"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/SplitLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/login_view"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/password" />
+
+            <EditText
+                android:id="@+id/login_password_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/CommonStyle.input_edittext"
+                android:hint="请输入密码"
+                android:textColor="@color/colorPrimary"
+                android:inputType="textPassword" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_marginTop="20dp"
-        />
+        android:background="@drawable/button_background"
+        android:text="登录"
+        android:textColor="@color/bar2"
+        android:textSize="17sp" />
 
-    <EditText
-        android:layout_marginTop="10dp"
-        android:id="@+id/et_password"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="密码"
-        android:inputType="textPassword" />
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp">
 
+        <TextView
+            android:id="@+id/login_pw_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记密码"
+            android:textColor="@color/color_login_bottom"
+            android:textSize="12sp" />
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:text="使用uidemo中的账户登录即可"
-        android:textColor="@android:color/darker_gray"
-        />
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="登录" />
-    <Button
-        android:id="@+id/btn_regist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="注册" />
-
-
+        <TextView
+            android:id="@+id/login_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="手机号快捷登录"
+            android:textColor="@color/color_login_bottom"
+            android:textSize="12sp" />
+    </RelativeLayout>
 </LinearLayout>

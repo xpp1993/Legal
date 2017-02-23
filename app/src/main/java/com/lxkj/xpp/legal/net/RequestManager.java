@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.lxkj.xpp.legal.R;
+import com.lxkj.xpp.legal.constant.Constant;
 import com.lxkj.xpp.legal.net.callback.ReCallBack;
 import com.lxkj.xpp.legal.net.callback.ReqProgressCallBack;
 import com.lxkj.xpp.legal.utils.CommonUtils;
-import com.lxkj.xpp.legal.utils.ParameterUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -114,13 +114,13 @@ public class RequestManager {
     public <T> T requestAysn(String actionUrl, int requestCode, int requestType, HashMap<String, String> params, ReCallBack<T> reqCallBack) {
         T call = null;
         switch (requestType) {
-            case ParameterUtils.TYPE_GET:
+            case Constant.appFinal.TYPE_GET:
                 call = requestGet(actionUrl, requestCode, params, reqCallBack);
                 break;
-            case ParameterUtils.TYPE_POST_JSON:
+            case Constant.appFinal.TYPE_POST_JSON:
                 call = requestPost(actionUrl, requestCode, params, reqCallBack);
                 break;
-            case ParameterUtils.TYPE_POST_FORM:
+            case Constant.appFinal.TYPE_POST_FORM:
                 call = requestPostWitnForm(actionUrl, requestCode, params, reqCallBack);
                 break;
         }
@@ -140,7 +140,7 @@ public class RequestManager {
             //处理参数
             StringBuilder tempParams = handlerParams(parmsMap);
             //补全请求的参数
-            String requestUrl = String.format("%s/%s?%s", ParameterUtils.BASE_URL, actionUrl, tempParams.toString());
+            String requestUrl = String.format("%s/%s?%s", Constant.URL.BASE_URL, actionUrl, tempParams.toString());
             //使用,设置一个有效期为十秒的缓存
             final CacheControl cache = new CacheControl.Builder().maxAge(10, TimeUnit.MILLISECONDS).build();
             //创建一个请求
@@ -171,13 +171,13 @@ public class RequestManager {
             //处理请求参数
             StringBuilder tempParams = handlerParams(paramsMap);
             //补全请求地址
-            String requestUrl = String.format("%s/%s", ParameterUtils.BASE_URL, actionUrl);
+          // String requestUrl = String.format("%s/%s", Constant.URL.BASE_URL, actionUrl);
             //创建请求实体对象vrequestBody
-            RequestBody requestBody = RequestBody.create(ParameterUtils.MEDIA_TYPE_JSON, tempParams.toString());
+            RequestBody requestBody = RequestBody.create(Constant.appFinal.MEDIA_TYPE_JSON, tempParams.toString());
             //设置一个有效期为十秒的缓存
             final CacheControl cache = new CacheControl.Builder().maxAge(10, TimeUnit.SECONDS).build();
             //创建请求
-            Request request = addHeaders().cacheControl(cache).url(requestUrl).post(requestBody).build();
+            Request request = addHeaders().cacheControl(cache).url(actionUrl).post(requestBody).build();
             //创建一个call
             final Call call = mOkHttpClient.newCall(request);
             T responseStr = doRequst(callBack, call, requestCode);
@@ -209,7 +209,7 @@ public class RequestManager {
             //生成表单实体对象
             FormBody formBody = builder.build();
             //补全请求地址
-            String requestUrl = String.format("%s/%s", ParameterUtils.BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Constant.URL.BASE_URL, actionUrl);
             //创建一个请求
             final Request request = addHeaders().url(requestUrl).put(formBody).build();
             //创建一个Call
@@ -290,6 +290,7 @@ public class RequestManager {
                     successCallBack((T) responseString, callBack, requestCode);
                 } else {
                     failedCallBack(errorMsg, callBack, requestCode);
+                    Log.e(TAG,"enqueueCall----->"+errorMsg+response.headers()+","+response.code());
                 }
             }
         });
@@ -343,11 +344,11 @@ public class RequestManager {
      */
     public <T> void upLoadFile(String actionUrl, String filePath, final ReCallBack<T> callBack, int requestCode) {
         //请求补全地址
-        String requestUrl = String.format("%s/%s", ParameterUtils.BASE_URL, actionUrl);
+        String requestUrl = String.format("%s/%s", Constant.URL.BASE_URL, actionUrl);
         //创建file
         File file = new File(filePath);
         //创建requestbody
-        RequestBody requestBody = RequestBody.create(ParameterUtils.MEDIA_OBJECT_STREAM, file);
+        RequestBody requestBody = RequestBody.create(Constant.appFinal.MEDIA_OBJECT_JSON, file);
         //创建request
         final Request request = new Request.Builder().url(requestUrl).post(requestBody).build();
         //创建一个call
@@ -367,7 +368,7 @@ public class RequestManager {
     public <T> void upLoadFile(String actionUrl, HashMap<String, Object> paramsMap, final ReCallBack<T> callBack, int requestCode) {
         try {
             //补全请求地址
-            String requestUrl = String.format("%s/%s", ParameterUtils.BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Constant.URL.BASE_URL, actionUrl);
             //分块
             MultipartBody.Builder builder = new MultipartBody.Builder();
             //设置类型
@@ -382,7 +383,7 @@ public class RequestManager {
                     if (callBack instanceof ReqProgressCallBack) {//带参数带进度上传文件
                         //向下转型
                         ReqProgressCallBack reqProgressCallBack = (ReqProgressCallBack) callBack;
-                        builder.addFormDataPart(key, file.getName(), createProgressRequestBody(requestCode, ParameterUtils.MEDIA_OBJECT_STREAM, file, reqProgressCallBack));
+                        builder.addFormDataPart(key, file.getName(), createProgressRequestBody(requestCode, Constant.appFinal.MEDIA_OBJECT_JSON, file, reqProgressCallBack));
                     } else if (!(callBack instanceof ReqProgressCallBack)) {
                         builder.addFormDataPart(key, file.getName(), RequestBody.create(null, file));
                     }
@@ -417,7 +418,7 @@ public class RequestManager {
         //补全请求地址
         String requestUrl=null;
         if (requestCode != 0x26) {
-            requestUrl = String.format("%s/%s", ParameterUtils.BASE_URL, fileUrl);
+            requestUrl = String.format("%s/%s", Constant.URL.BASE_URL, fileUrl);
         }
         if (requestCode==0x26){
             requestUrl=fileUrl;

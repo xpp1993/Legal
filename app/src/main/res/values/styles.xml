@@ -1,39 +1,72 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-    <style name="NoActionBar" parent="AppTheme">
-        <!-- Customize your theme here. -->
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+    <!-- Activity主题 -->
+    <style name="activityTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
     </style>
+    <!--主页LinearLayout的style-->
+    <style name="main_ll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">right</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <!--主页TextView的style-->
+    <style name="main_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <!--主页ImageView的style-->
+    <style name="main_iv">
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
     <style name="main_tab_bottom">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@null</item>
-        <item name="android:paddingTop">3dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">3dp</item>
         <item name="android:scaleType">matrix</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-    <!-- MainBar Begin -->
-    <style name="MainBarTextStyle">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#F1F1F1</item>
-        <item name="android:alpha">1</item>
+        <item name="android:textSize">11sp</item>
     </style>
     <!-- Common style begin-->
     <style name="CommonStyle"></style>
     <!-- Common input edittext begin-->
     <style name="CommonStyle.input_edittext" parent="CommonStyle">
-        <item name="android:background">@color/Transparent</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColorHint">#d8d8d8</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        <item name="android:textColorHint">@color/color_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
     <!-- Common input edittext end-->
+    <!-- Common 修改密码界面 edittext begin-->
+    <style name="CommonStyle.cpw_edittext" parent="CommonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:background">@drawable/et_change_password</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        <item name="android:textColorHint">@color/color_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+    <!-- Common 修改密码界面 edittext end-->
 </resources>

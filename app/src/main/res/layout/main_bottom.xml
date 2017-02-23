@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_host"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#DCDCDC">
+    android:layout_height="49dp"
+    android:background="@color/color_transparent">
 
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="49dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -20,12 +20,11 @@
 
             <Button
                 android:id="@+id/btn_main"
+                android:drawableTop="@drawable/zhuye2"
                 style="@style/main_tab_bottom"
                 android:onClick="onTabClicked"
-                android:drawableTop="@drawable/main_rb_draw_main"
-                android:textColor="@drawable/selector_text_color_exchang"
-                android:text="首页"
-               />
+                android:textColor="@color/colorPrimary"
+                android:text="主页" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -33,26 +32,28 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <Button
                 android:id="@+id/btn_message"
                 style="@style/main_tab_bottom"
+                android:drawableTop="@drawable/liaotian1"
                 android:onClick="onTabClicked"
-                android:drawableTop="@drawable/main_rb_draw_message"
-                android:textColor="@drawable/selector_text_color_exchang"
-                android:text="聊天" />
-            <TextView
-                android:id="@+id/unread_msg_number"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="1dp"
-                android:gravity="center"
-                android:background="@drawable/em_unread_count_bg"
-                android:text="7"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:visibility="invisible" />
+                android:textColor="@color/color_white"
+                android:text="聊天"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/unread_msg_number"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_marginTop="1dp"-->
+            <!--android:background="@drawable/em_unread_count_bg"-->
+            <!--android:gravity="center"-->
+            <!--android:text="7"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="12sp"-->
+            <!--android:visibility="invisible" />-->
         </RelativeLayout>
 
         <RelativeLayout
@@ -64,16 +65,16 @@
             <Button
                 android:id="@+id/btn_me"
                 style="@style/main_tab_bottom"
+                android:drawableTop="@drawable/wode1"
                 android:onClick="onTabClicked"
-                android:drawableTop="@drawable/main_rb_draw_my"
-                android:textColor="@drawable/selector_text_color_exchang"
-                android:text="我的"/>
+                android:text="我的"
+                android:textColor="@color/color_white" />
         </RelativeLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.2dp"
+        android:layout_height="0.5dp"
         android:layout_alignTop="@id/main_bottom"
-        android:background="@color/line_color_drackgray" />
+        android:background="@color/SplitLine" />
 </RelativeLayout>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_check_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <LinearLayout
+            android:id="@+id/registID_name_ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="姓名"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/id_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/left_jiantou"
+                android:gravity="right"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/registId_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/registID_name_ll"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/SplitLine" />
+
+        <LinearLayout
+            android:id="@+id/registID_ID_ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/registID_name_ll"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="身份证号码"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/id_id_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/left_jiantou"
+                android:gravity="right"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/registId_view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/registID_ID_ll"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/SplitLine" />
+
+        <LinearLayout
+            android:id="@+id/registID_age_ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/registID_ID_ll"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="年龄"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/id_age_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/id_age_show_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bar2"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/id_age_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@mipmap/left_jiantou"
+                    android:textColor="@color/bar2"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/registId_view3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/registID_age_ll"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/SplitLine" />
+
+        <LinearLayout
+            android:id="@+id/registID_sex_ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/registID_age_ll"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="性别"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/id_sex_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/left_jiantou"
+                android:gravity="right"
+                android:textColor="@color/bar2"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="身份证正面"
+        android:textColor="@color/main_bottom_unselect"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/registID_image"
+            android:layout_width="95dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
+            android:background="@drawable/id_upload_pic" />
+
+        <TextView
+            android:id="@+id/click_tv"
+            android:layout_width="95dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@id/registID_image"
+            android:layout_marginLeft="10dp"
+            android:background="@color/color_id_image"
+            android:gravity="center_horizontal"
+            android:text="点击上传图片"
+            android:textColor="@color/color_white" />
+
+        <ImageView
+            android:id="@+id/registID_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/click_tv"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="48dp"
+            android:background="@mipmap/jiahao" />
+
+    </RelativeLayout>
+</LinearLayout>

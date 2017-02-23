@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00acff</color>
-    <color name="colorPrimaryDark">#00acff</color>
-    <color name="colorAccent">#00acff</color>
+    <color name="colorPrimary">#7F3856</color>
+    <color name="colorPrimaryDark">#7F3856</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="messagecolor">#FF2B2B</color><!-- 消息圆点的颜色 -->
     <color name="color_white">#ffffff</color>
-    <color name="color_gray">#B9B9B9</color>
-    <!-- 线条颜色 -->
-    <color name="line_color_drackgray">#999999</color>
-    <color name="btn_login_pressed">#46678d</color>
-    <color name="btn_logout_normal">#d33f3f</color>
-    <!--pdf-->
-    <color name="bar">#a0202020</color>
-    <color name="Transparent">#00ffffff</color>
+    <color name="main_bottom_unselect">#666666</color>
+    <color name="color_transparent">#00ffffff</color>
+    <color name="bar2">#000000</color>
+    <color name="color_gray">#999999</color>
     <!-- 分割线 -->
-    <color name="SplitLine">#d8d8d8</color>
+    <color name="SplitLine">#CCCCCC</color>
+    <!--登录界面小号字体的颜色-->
+    <color name="color_login_bottom">#4E182F</color>
+    <!--验证码背景颜色-->
+    <color name="color_check_bg">#EDEDED</color>
+    <!--添加图片的背景颜色-->
+    <color name="color_id_image">#6B6B6B</color>
+    <color name="color_me_bg">#F1F1F1</color>
 </resources>

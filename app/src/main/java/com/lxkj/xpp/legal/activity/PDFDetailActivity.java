@@ -3,6 +3,7 @@ package com.lxkj.xpp.legal.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
@@ -21,13 +22,14 @@ import com.shockwave.pdfium.PdfDocument;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by 熊萍萍 on 2017/1/5/005.
  * 加载pdf 详情页
  */
 
-public class PDFDetailActivity extends BaseActivity implements OnPageChangeListener, OnLoadCompleteListener, View.OnClickListener {
+public class PDFDetailActivity extends BaseActivity implements OnPageChangeListener, OnLoadCompleteListener {
     @BindView(R.id.pdfView)
     public PDFView pdfView;
     @BindView(R.id.bar_iv_left)
@@ -40,12 +42,8 @@ public class PDFDetailActivity extends BaseActivity implements OnPageChangeListe
     private String pdfFileName;
 
     @Override
-    protected void initListener() {
-        bar_left.setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
+    protected void initWidgets(Bundle savedInstanceState) {
+        super.initWidgets(savedInstanceState);
         bar_left.setVisibility(View.VISIBLE);
         bar_title.setVisibility(View.VISIBLE);
         bar_title.setText("详情");
@@ -55,7 +53,6 @@ public class PDFDetailActivity extends BaseActivity implements OnPageChangeListe
             Log.d(TAG, uri.toString());
             displayFromUri(uri);
         }
-
     }
 
     @Override
@@ -140,9 +137,9 @@ public class PDFDetailActivity extends BaseActivity implements OnPageChangeListe
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    @OnClick({R.id.bar_iv_left})
+    void click(View view) {
+        switch (view.getId()) {
             case R.id.bar_iv_left:
                 finish();
                 break;

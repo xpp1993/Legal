@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!--这个是隐藏的布局，然后通过动态的设置高度达到效果-->
+    <LinearLayout
+        android:id="@+id/main_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:visibility="gone"></LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/color_transparent">
+
+        <TextView
+            android:id="@+id/homepage_bar_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="深圳"
+            android:textColor="@color/color_white"
+            android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/homepage_bar_im_arrow"
+            android:layout_width="16dp"
+            android:layout_height="9dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@id/homepage_bar_tv"
+            android:src="@mipmap/arrow_down" />
+
+        <ImageView
+            android:id="@+id/homepage_bar_im_search"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="19dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/sousuo" />
+    </RelativeLayout>
+</LinearLayout>
