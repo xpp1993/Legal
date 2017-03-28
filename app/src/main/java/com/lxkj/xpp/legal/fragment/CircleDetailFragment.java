@@ -88,6 +88,7 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
     @Override
     protected void initData() {
         mHandler=new Handler();
+        scrollView.smoothScrollTo(0,0);
         mCommitRelativeLayout.findViewById(R.id.commit_bt).setOnClickListener(this);
     }
 
@@ -152,7 +153,7 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
     private Runnable srcollRunnable = new Runnable() {
         @Override
         public void run() {
-            scrollView.smoothScrollTo(0, scrollView.getChildAt(0).getHeight());
+            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     };
 
