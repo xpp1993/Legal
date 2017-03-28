@@ -3,38 +3,57 @@
     xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
+    android:background="@color/color_check_bg"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/chat_status_bar"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/top_bar_normal_bg"
-        android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
-
+    <!--<include layout="@layout/bar2" />-->
     <com.hyphenate.easeui.widget.EaseTitleBar
-        android:id="@+id/title_bar"
+        android:id="@+id/conversation_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        hyphenate:titleBarTitle="@string/session" />
+        hyphenate:titleBarTitle="会话" />
+    <!--<include layout="@layout/bar" />-->
 
-    <include layout="@layout/ease_search_bar" />
+    <include
+        layout="@layout/search_bar_with_padding"
+        android:visibility="gone" />
 
-    <FrameLayout
-        android:id="@+id/fl_error_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
-
-
-    <com.hyphenate.easeui.widget.EaseConversationList
-        android:id="@+id/list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:cacheColorHint="#00000000"
-        android:divider="@null"
-        hyphenate:cvsListPrimaryTextSize="16sp" />
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/ec_edit_chat_id"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:hint="请输入对方的username"
+            android:textSize="19sp" />
+
+        <Button
+            android:id="@+id/ec_btn_start_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background3"
+            android:text="发起聊天"
+            android:textColor="@color/color_white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/ec_btn_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background3"
+            android:text="退出登录"
+            android:textColor="@color/color_white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
 
 </LinearLayout>

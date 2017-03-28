@@ -1,38 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_me_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/bar2" />
+    <!--<include layout="@layout/bar2" />-->
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/feedback_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px86dp"
+        hyphenate:titleBarLeftImage="@mipmap/back"
+        hyphenate:titleBarTitle="用户反馈" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_white">
+        android:layout_height="@dimen/px110dp"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:text="请留下您的电话"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
 
         <EditText
+            android:id="@+id/feedback_phone"
             style="@style/CommonStyle.input_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
-            android:hint="请写下您的意见..."
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/colorPrimary" />
+            android:layout_marginRight="@dimen/px40dp"
+            android:gravity="right|center_vertical"
+            android:hint="请输入"
+            android:textColorHint="#bfbfbf" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1dp"
+            android:background="#e0e0e0" />
     </LinearLayout>
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button_background"
-        android:text="提交"
-        android:textColor="@color/bar2"
-        android:textSize="17sp" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/feedback_et"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:focusable="true"
+            android:gravity="left"
+            android:hint="请输入您的反馈意见"
+            android:paddingLeft="@dimen/px42dp"
+            android:paddingTop="@dimen/px30dp"
+            android:textColor="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/feedback_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feedback_et"
+            android:layout_marginBottom="@dimen/px74dp"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:layout_marginTop="@dimen/px30dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/zili_tianjia" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/fragment_feedback_commit"
+            android:layout_width="@dimen/px680dp"
+            android:layout_height="@dimen/px98dp"
+            android:background="@drawable/button_geren_bg"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/color_white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 </LinearLayout>

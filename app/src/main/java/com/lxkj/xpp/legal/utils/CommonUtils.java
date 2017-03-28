@@ -1,31 +1,50 @@
 package com.lxkj.xpp.legal.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.lxkj.xpp.legal.R;
 import com.lxkj.xpp.legal.app.MyApplication;
+import com.lxkj.xpp.legal.constant.Constant;
+import com.lxkj.xpp.legal.model.LoginModel;
+import com.lxkj.xpp.legal.model.bean.LoginMessage;
+import com.lxkj.xpp.legal.utils.okhttp.OkHttpUtils;
+import com.lxkj.xpp.legal.utils.okhttp.PreferencesUtils;
+import com.lxkj.xpp.legal.utils.okhttp.callback.GenericsCallback;
+import com.lxkj.xpp.legal.utils.okhttp.callback.JsonGenericsSerializator;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import okhttp3.Call;
 
 /**
  * Created by 熊萍萍 on 2016/12/19/019.
@@ -33,23 +52,7 @@ import java.util.HashMap;
  */
 
 public class CommonUtils {
-    /**
-     * 判断网络是否连接
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            //获取手机所有的连接管理对象（包括WiFi，net等连接管理）
-            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-            if (networkInfo != null) {
-                return networkInfo.isConnectedOrConnecting();
-            }
-        }
-        return false;
-    }
+
 
     /**
      * 构建参数map对象的工具方法
@@ -66,28 +69,81 @@ public class CommonUtils {
         return map;
     }
 
+    public static String getParameterJsonResult(String keys[], Object... values) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        for (int i = 0; i < keys.length; i++) {
+            jsonObject.put(keys[i], values[i]);
+        }
+        return jsonObject.toString();
+
+    }
+
+
+    /**
+     * 获取验证码
+     *
+     * @param phone_et 手机号码 editText
+     * @param type     获取验证码类型 ：1001	用户注册  2001验证码登 3001第三方账号绑定
+     * @param listener 接口回调，用于和view层通信
+     */
+
+    public static void getCheckCode(Context context, EditText phone_et, int type, final LoginModel.OnLoginListener listener) {
+        String phone = phone_et.getText().toString().trim();
+        String typeStr = String.valueOf(type);
+        if (TextUtils.isEmpty(phone)) {//手机号码为空
+            listener.onError(context.getString(R.string.phone_empty), Constant.REGIST.toast_userName_empty);
+        } else if (!FormatCheck.isMobile(phone)) {//手机号码格式错误
+            listener.onError(context.getString(R.string.phone_error), Constant.REGIST.toast_userName_error);
+        } else {//联网获取手机验证码
+            netForCheckCode(listener, phone, typeStr);
+        }
+    }
+
+    /**
+     * 联网获取手机验证码
+     *
+     * @param listener
+     * @param phone
+     * @param typeStr
+     */
+    public static void netForCheckCode(final LoginModel.OnLoginListener listener, String phone, String typeStr) {
+        HashMap<String, String> params =
+                CommonUtils.getParameterMap(new String[]{"phone", "type"}, phone, typeStr);
+        OkHttpUtils
+                .postString()
+                .url(Constant.URL.CODE_URL)
+                .id(Constant.appFinal.flag_getcode)
+                .content(new Gson().toJson(params))
+                .mediaType(Constant.appFinal.MEDIA_TYPE_JSON)
+                .build()
+                .execute(new GenericsCallback<LoginMessage>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
+
+                    @Override
+                    public void onResponse(LoginMessage response, int id) {
+                        listener.onSuccess(response, null, id);
+                    }
+
+                });
+    }
+
     public static Context getContext() {
         return MyApplication.applicationContext;
     }
 
-    /**
-     * 获取文件版本
-     *
-     * @return
-     */
-    public static int getVerCode() {
-        int verCode = -1;
-        try {
-            verCode = getContext().getPackageManager().getPackageInfo("com.lxkj.xpp.legal", 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return verCode;
+    public static PreferencesUtils getPreference() {
+        return MyApplication.preferencesUtils;
     }
-    /** 调度剪裁intent
-    * @param dataUri 选中图片的uri路径
-    * @return 返回意图
-    */
+
+    /**
+     * 调度剪裁intent
+     *
+     * @param dataUri 选中图片的uri路径
+     * @return 返回意图
+     */
     public static Intent getPhotoZoomIntent(Uri dataUri) {
         Intent intent = new Intent();
         //系统裁剪活动
@@ -110,38 +166,6 @@ public class CommonUtils {
         intent.putExtra("scaleUpIfNeeded", true);
         return intent;
     }
-    /**
-     * 将file转为数组
-     *
-     * @param file
-     * @return
-     */
-    public static byte[] changeFileToByte(File file) {
-        byte[] buffer = null;
-        try {
-
-            if (file == null || !file.exists()) {
-                return null;
-            }
-            FileInputStream fis = new FileInputStream(file);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
-            byte[] b = new byte[1024];
-            int n;
-
-            while ((n = fis.read(b)) != -1) {
-                bos.write(b, 0, n);
-                bos.flush();
-            }
-            fis.close();
-            bos.close();
-            buffer = bos.toByteArray();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer;
-    }
 
     /**
      * 使用系统当前时间，产生一个临时文件，用户缓存
@@ -162,6 +186,106 @@ public class CommonUtils {
         }
         return file;
     }
+
+    public static File scal(Uri fileUri) {
+        String path = fileUri.getPath();
+        File outputFile = new File(path);
+        long fileSize = outputFile.length();
+        final long fileMaxSize = 100 * 1024;
+        if (fileSize >= fileMaxSize) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            int height = options.outHeight;
+            int width = options.outWidth;
+
+            double scale = Math.sqrt((float) fileSize / fileMaxSize);
+            options.outHeight = (int) (height / scale);
+            options.outWidth = (int) (width / scale);
+            options.inSampleSize = (int) (scale + 0.5);
+            options.inJustDecodeBounds = false;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            outputFile = getTempFile(".jpg");
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(outputFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                fos.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            } else {
+                File tempFile = outputFile;
+                outputFile = getTempFile(".jpg");
+                copyFileUsingFileChannels(tempFile, outputFile);
+            }
+
+        }
+        return outputFile;
+
+    }
+
+    public static void copyFileUsingFileChannels(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                inputChannel.close();
+                outputChannel.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 关闭键盘
+     */
+    public static void closeKeyMap(FragmentActivity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null&&activity.getCurrentFocus()!=null&&activity.getCurrentFocus().getWindowToken()!=null)
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * 打开键盘
+     */
+    public static void openKeyboard(FragmentActivity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * 删除ArrayList中重复元素，保持顺序
+     */
+    public static List removeDuplicateWithOrder(List list) {
+        Set set = new HashSet();
+        List newList = new ArrayList();
+        for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            Object element = iter.next();
+            if (set.add(element))
+                newList.add(element);
+        }
+        list.clear();
+        list.addAll(newList);
+        return list;
+        // System.out.println( " remove duplicate "   +  list);
+    }
+
     //打开APK程序代码
 
     /**
@@ -179,86 +303,4 @@ public class CommonUtils {
         getContext().startActivity(intent);
     }
 
-    /**
-     * 通过反射的方式获取状态栏高度
-     *
-     * @return
-     */
-    public static int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getContext().getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-/**
- * Android系统更改状态栏字体颜色
- */
-    /**
-     * MIUI6+
-     */
-    public static boolean setMiuiStatusBarDarkMode(Activity activity, boolean darkmode) {
-        Class<? extends Window> clazz = activity.getWindow().getClass();
-        try {
-            int darkModeFlag = 0;
-            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-            extraFlagField.invoke(activity.getWindow(), darkmode ? darkModeFlag : 0, darkModeFlag);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * Flyme4+ 魅族
-     */
-    public static boolean setMeizuStatusBarDarkIcon(Activity activity, boolean dark) {
-        boolean result = false;
-        if (activity != null) {
-            try {
-                WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-                Field darkFlag = WindowManager.LayoutParams.class
-                        .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-                Field meizuFlags = WindowManager.LayoutParams.class
-                        .getDeclaredField("meizuFlags");
-                darkFlag.setAccessible(true);
-                meizuFlags.setAccessible(true);
-                int bit = darkFlag.getInt(null);
-                int value = meizuFlags.getInt(lp);
-                if (dark) {
-                    value |= bit;
-                } else {
-                    value &= ~bit;
-                }
-                meizuFlags.setInt(lp, value);
-                activity.getWindow().setAttributes(lp);
-                result = true;
-            } catch (Exception e) {
-            }
-        }
-        return result;
-    }
-
-    /**
-     * 白底黑字，改变状态栏的颜色为深色
-     */
-    public static void setMystatusBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setMiuiStatusBarDarkMode(activity, true);
-            setMeizuStatusBarDarkIcon(activity, true);
-            // 在Android6.0才开始支持SYSTEM_UI_FLAG_LIGHT_STATUS_BAR可以将状态栏图标改为灰色。
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//6.0
-                activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
-        }
-    }
 }

@@ -1,2 +1,2 @@
-include ':app', ':android-pdf-viewer'
-include ':easeUI_CN'
+include ':app', ':phonelib'
+include ':easeui'

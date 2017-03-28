@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_check_bg"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/seniority_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px86dp"
+        hyphenate:titleBarLeftImage="@mipmap/back"
+        hyphenate:titleBarTitle="资历认证" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px110dp"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:text="就职单位"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/seniority_unit"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px38dp"
+            android:gravity="right|center_vertical"
+            android:hint="请输入"
+            android:textColorHint="#bfbfbf" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1dp"
+        android:background="#e0e0e0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px110dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:text="职务"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/seniority_duty"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px38dp"
+            android:gravity="right|center_vertical"
+            android:hint="请输入"
+            android:textColorHint="#bfbfbf" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/seniority_send_warn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:gravity="left"
+            android:hint="请上传资历证书(选填)"
+            android:paddingLeft="@dimen/px42dp"
+            android:paddingTop="@dimen/px36dp"
+            android:textColor="#999999" />
+
+        <ImageView
+            android:id="@+id/seniority_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seniority_send_warn"
+            android:layout_marginBottom="@dimen/px58dp"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:layout_marginTop="@dimen/px58dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/zili_tianjia" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px110dp"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:text="对谁公开"
+            android:textColor="#666666"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/seniority_empowerWay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/px40dp"
+            android:drawablePadding="@dimen/px34dp"
+            android:drawableRight="@mipmap/icon_gengduo"
+            android:gravity="right"
+            android:text="好友可见"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px32dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px42dp"
+            android:layout_marginRight="@dimen/px42dp"
+            android:src="@mipmap/tishi" />
+
+        <TextView
+            android:id="@+id/seniority_warn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="实名提示内容：如为什么要实名"
+            android:textColor="#bfbfbf"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/fragment_seniority_commit"
+            android:layout_width="@dimen/px680dp"
+            android:layout_height="@dimen/px98dp"
+            android:background="@drawable/button_geren_bg"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/color_white"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

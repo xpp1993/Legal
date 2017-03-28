@@ -4,14 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <!--这个是隐藏的布局，然后通过动态的设置高度达到效果-->
-    <LinearLayout
-        android:id="@+id/status_bar"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,5 +34,15 @@
             android:text="标题1"
             android:textColor="@color/color_white"
             android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/bar_image_right"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>

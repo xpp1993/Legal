@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/create_group"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="创建群组"
+        android:textColor="@color/bar2"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/add_group_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="添加好友/群"
+        android:textColor="@color/bar2"
+        android:textSize="19sp" />
+</LinearLayout>

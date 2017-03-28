@@ -1,131 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@color/home_page_color"
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/homepage_bar"
-        layout="@layout/home_page_bar" />
+        <com.hyphenate.easeui.widget.EaseTitleBar
+            android:id="@+id/home_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            hyphenate:titleBarTitle="@string/homepage_name" />
 
-    <View
-        android:id="@+id/homepage_view"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/homepage_bar"
-        android:background="@color/SplitLine" />
+        <RelativeLayout
+            android:id="@+id/sign_desk_rl"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@id/home_title_bar"
+            android:background="@color/btn_answer_normal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/homepage_view">
-
-        <LinearLayout
-            android:id="@+id/homepage_legal_document_ll"
-            style="@style/main_ll"
-            android:layout_marginTop="23dp">
-
-            <TextView
-                style="@style/main_tv"
-                android:text="法律大全"
-                android:textColor="@color/color_white" />
-
-            <ImageView
-                android:id="@+id/homepage_legal_document_iv"
-                style="@style/main_iv"
-                android:layout_marginRight="52dp"
-                android:src="@drawable/falvdaquan" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/homepage_classified_ll"
-            style="@style/main_ll"
-            android:layout_below="@id/homepage_legal_document_ll"
-            android:layout_marginTop="7dp">
-
-            <TextView
-                style="@style/main_tv"
-                android:text="分类"
-                android:textColor="@color/color_white" />
-
-            <ImageView
-                android:id="@+id/homepage_classified_iv"
-                style="@style/main_iv"
-                android:layout_marginRight="154dp"
-                android:src="@drawable/fenlei" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/homepage_chat_ll"
-            style="@style/main_ll"
-            android:layout_below="@id/homepage_classified_ll"
-            android:layout_marginTop="36dp">
-
-            <TextView
-                style="@style/main_tv"
-                android:text="自助诊断"
-                android:textColor="@color/color_white" />
-
-            <ImageView
-                android:id="@+id/homepage_self_diagnosis_iv"
-                style="@style/main_iv"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="44dp"
-                android:src="@drawable/zhenduan" />
-
-            <TextView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="11dp"
-                android:text="聊天"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/sign_desk_rl"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <GridView
+                android:id="@+id/home_gridview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <ImageView
-                android:id="@+id/homepage_chat_iv"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="10dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/liaotian" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/homepage_labor_union_ll"
-            style="@style/main_ll"
-            android:layout_below="@id/homepage_chat_ll"
-            android:layout_marginTop="39dp">
-
-            <TextView
-                style="@style/main_tv"
-                android:text="工会"
-                android:textColor="@color/color_white" />
-
-            <ImageView
-                android:id="@+id/homepage_labor_iv"
-                style="@style/main_iv"
-                android:layout_marginRight="154dp"
-                android:src="@drawable/gonghui" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/homepage_post_bar_ll"
-            style="@style/main_ll"
-            android:layout_below="@id/homepage_labor_union_ll"
-            android:layout_marginTop="4dp">
-
-            <TextView
-                style="@style/main_tv"
-                android:text="贴书"
-                android:textColor="@color/color_white" />
-
-            <ImageView
-                android:id="@+id/homepage_post_bar_iv"
-                style="@style/main_iv"
-                android:layout_marginRight="52dp"
-                android:src="@drawable/gonghui" />
-        </LinearLayout>
+                android:id="@+id/home_chat_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher" />
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>

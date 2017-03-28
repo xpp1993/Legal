@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:meg="http://schemas.android.com/apk/res-auto"
+    xmlns:mgl="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/circle_item_rl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/px34dp"
+    android:background="#FBFCFD"
+    android:paddingBottom="@dimen/px50dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/item_head"
+        android:layout_width="@dimen/px68dp"
+        android:layout_height="@dimen/px68dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/px12dp"
+        android:layout_marginRight="@dimen/px22dp"
+        android:layout_marginTop="@dimen/px30dp"
+        android:src="@mipmap/pic" />
+
+    <RelativeLayout
+        android:id="@+id/item_rl_head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/item_head"
+        android:layout_alignTop="@id/item_head"
+        android:layout_toRightOf="@id/item_head">
+
+        <TextView
+            android:id="@+id/item_what_ago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/px40dp"
+            android:maxLines="1"
+            android:text="1天前"
+            android:textColor="#d3d3d3"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/item_what_ago"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="朝阳兔的围脖"
+            android:textColor="@color/bar2"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/item_rl_head"
+        android:layout_below="@id/item_rl_head"
+        android:layout_marginRight="@dimen/px40dp"
+        android:layout_marginTop="@dimen/px16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/px20dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="@dimen/px20dp"
+            android:maxLines="3"
+            android:textColor="#666666"
+            android:textSize="15sp" />
+
+        <com.lxkj.xpp.legal.widget.adaptivedgridview.MyGridlayout
+            android:id="@+id/item_image_gv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            mgl:itemMarginBottom="@dimen/px38dp"
+            mgl:itemMarginLeft="2dp"
+            mgl:itemMarginRight="2dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/px20dp">
+
+            <TextView
+                android:id="@+id/item_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="52 评论"
+                android:textColor="#d3d3d3"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/item_comment_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/pinglun" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/all_comment_warn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="全部评论"
+            android:textColor="#D3D3D3"
+            android:visibility="gone" />
+
+        <com.lxkj.xpp.legal.widget.MessageGroup
+            android:id="@+id/item_mg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            meg:item_margin_left="0dp"
+            meg:item_margin_right="0dp"
+            meg:item_text_size="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

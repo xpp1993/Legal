@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/comm_login_phone_ll"
+        android:layout_width="@dimen/px666dp"
+        android:layout_height="@dimen/px96dp"
+        android:layout_marginTop="@dimen/px84dp"
+        android:background="@drawable/button_background"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px50dp"
+            android:layout_marginRight="@dimen/px50dp"
+            android:gravity="center_vertical"
+            android:text="手机号"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/comm_login_phone_et"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入手机号码"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/comm_login_password_ll"
+        android:layout_width="@dimen/px666dp"
+        android:layout_height="@dimen/px96dp"
+        android:layout_marginTop="@dimen/px70dp"
+        android:background="@drawable/button_background"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px50dp"
+            android:layout_marginRight="@dimen/px50dp"
+            android:gravity="center_vertical"
+            android:text="密    码"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/comm_login_pw_et"
+            style="@style/CommonStyle.input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/comm_login_tv"
+        android:layout_width="@dimen/px666dp"
+        android:layout_height="@dimen/px96dp"
+        android:layout_marginTop="@dimen/px108dp"
+        android:background="@mipmap/btn_dl_nor"
+        android:gravity="center"
+        android:text="登录"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <include layout="@layout/qq_wechat_login" />
+</LinearLayout>

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#7F3856</color>
-    <color name="colorPrimaryDark">#7F3856</color>
-    <color name="colorAccent">#ffffff</color>
-    <color name="messagecolor">#FF2B2B</color><!-- 消息圆点的颜色 -->
+    <color name="colorPrimary">#ff995c</color>
+    <color name="colorPrimaryDark">#ff995c</color>
+    <color name="colorAccent">#ff995c</color>
+    <!-- 消息圆点的颜色 -->
     <color name="color_white">#ffffff</color>
     <color name="main_bottom_unselect">#666666</color>
     <color name="color_transparent">#00ffffff</color>
-    <color name="bar2">#000000</color>
+    <color name="bar2">#333333</color>
     <color name="color_gray">#999999</color>
-    <!-- 分割线 -->
-    <color name="SplitLine">#CCCCCC</color>
     <!--登录界面小号字体的颜色-->
     <color name="color_login_bottom">#4E182F</color>
     <!--验证码背景颜色-->
@@ -18,4 +16,27 @@
     <!--添加图片的背景颜色-->
     <color name="color_id_image">#6B6B6B</color>
     <color name="color_me_bg">#F1F1F1</color>
+    <!--tab字体切换的颜色-->
+    <color name="btn_text_nor">#888888</color>
+    <color name="btn_text_pre">#ff995c</color>
+    <!--tab分割线的颜色-->
+    <color name="tab_splite">#C9C9C9</color>
+    <!--首页的背景色-->
+    <color name="home_page_color">#FBFCFD</color>
+    <!--通讯录、帖书的背景色-->
+    <color name="bg_color">#F5F5F5</color>
+    <!-- 分割线 -->
+    <color name="SplitLine">#E5E5E5</color>
+    <color name="real_warn">#BFBFBF</color>
+    <color name="hint_color">#999999</color>
+    <!--message颜色-->
+    <color name="colorMessageText">#666666</color>
+    <!--发信人/收信人 颜色-->
+    <color name="colorUserText">#5E9DF3</color>
+    <!--message选中背景色-->
+    <color name="colorPressed">#ffd8d8d8</color>
+    <!--发信人/收信人 高亮背景色-->
+    <color name="colorHighlight">#BBBBBB</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
 </resources>

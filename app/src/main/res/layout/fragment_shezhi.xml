@@ -1,86 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="@color/color_me_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/bar2" />
-
-    <View
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/set_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/SplitLine" />
+        android:layout_height="@dimen/px86dp"
+        hyphenate:titleBarLeftImage="@mipmap/back"
+        hyphenate:titleBarTitle="设置" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/px110dp"
+        android:layout_marginTop="@dimen/px30dp"
         android:background="@color/color_white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px44dp"
+            android:layout_weight="1"
+            android:text="重置密码"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/set_change_pw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="个人信息"
-            android:textColor="@color/bar2"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/shezhi_xinxi_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:drawableRight="@mipmap/left_jiantou"
-            android:gravity="right" />
+            android:paddingLeft="@dimen/px44dp"
+            android:paddingRight="@dimen/px44dp"
+            android:src="@mipmap/icon_gengduo" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/SplitLine" />
+        android:layout_height="@dimen/px1dp"
+        android:background="#e0e0e0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/px110dp"
         android:background="@color/color_white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px44dp"
+            android:layout_weight="1"
+            android:text="修改手机号"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/set_change_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="登录密码"
-            android:textColor="@color/bar2"
-            android:textSize="14sp" />
+            android:paddingLeft="@dimen/px44dp"
+            android:paddingRight="@dimen/px44dp"
+            android:src="@mipmap/icon_gengduo" />
 
-        <TextView
-            android:id="@+id/shezhi_cpw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:drawablePadding="5dp"
-            android:drawableRight="@mipmap/left_jiantou"
-            android:gravity="right"
-            android:text="修改"
-            android:textColor="@color/color_gray"
-            android:textSize="12sp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/shezhi_loginout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/button_background"
-        android:text="退出账号"
-        android:textSize="17sp"
-        android:textColor="@color/bar2" />
+        android:layout_height="@dimen/px110dp"
+        android:layout_marginTop="@dimen/px30dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px44dp"
+            android:layout_weight="1"
+            android:text="关于我们"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/set_about_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/px44dp"
+            android:paddingRight="@dimen/px44dp"
+            android:src="@mipmap/icon_gengduo" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1dp"
+        android:background="#e0e0e0" />
+
+    <LinearLayout
+        android:id="@+id/set_update_version"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px110dp"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px44dp"
+            android:text="版本更新"
+            android:textColor="@color/bar2"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/set_login_out"
+            android:layout_width="@dimen/px680dp"
+            android:layout_height="@dimen/px98dp"
+            android:layout_marginTop="@dimen/px142dp"
+            android:background="@drawable/button_geren_bg"
+            android:gravity="center"
+            android:text="退出登录"
+            android:textColor="@color/color_white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 </LinearLayout>

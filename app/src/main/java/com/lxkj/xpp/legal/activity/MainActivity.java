@@ -1,73 +1,90 @@
 package com.lxkj.xpp.legal.activity;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.lxkj.xpp.legal.R;
 import com.lxkj.xpp.legal.base.BaseActivity;
-import com.lxkj.xpp.legal.constant.Constant;
-import com.lxkj.xpp.legal.fragment.ChatConversationListFragment;
-import com.lxkj.xpp.legal.fragment.HomeFragment;
+import com.lxkj.xpp.legal.base.BaseFragment;
+import com.lxkj.xpp.legal.event.NavFragmentEvent;
+import com.lxkj.xpp.legal.fragment.FeedBackFragment;
+import com.lxkj.xpp.legal.fragment.FragmentSeniority;
+import com.lxkj.xpp.legal.fragment.IDRegistFragment;
+import com.lxkj.xpp.legal.fragment.LoginFragment;
+import com.lxkj.xpp.legal.fragment.MainTabFragment;
 import com.lxkj.xpp.legal.fragment.MeFragment;
-import com.lxkj.xpp.legal.mvppresenter.MainPresenter;
-import com.lxkj.xpp.legal.mvpview.MainView;
+import com.lxkj.xpp.legal.fragment.SelfFragment;
+import com.lxkj.xpp.legal.fragment.ShezhiFragment;
+import com.lxkj.xpp.legal.presenter.MainPresenter;
+import com.lxkj.xpp.legal.utils.CommonUtils;
+import com.lxkj.xpp.legal.view.MainView;
 
-import butterknife.BindView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.LinkedList;
+
+import qiu.niorgai.StatusBarCompat;
 
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainView {
-    @BindView(R.id.tab_host)
-    public RelativeLayout relativeLayout_bottom;
-    public Button[] mTabs;
+    private FragmentManager fm;
+    private LinkedList<String> mFragments = new LinkedList<String>();
+
+    public static final int LAST_CLICK_GAP = 600;
+
+    public long lastClickTime = 0;
+
     private long mExitTime = 0;
-    private ChatConversationListFragment conversationListFragment;//会话列表界面
-    private MeFragment meFragment;//我的页面
-    private HomeFragment mainFragment;//主页
-    private Fragment[] fragments;
-    private int index;
+
+    public static final int EXIT_TIME_GAP = 2000;
 
     @Override
     protected void initWidgets(Bundle savedInstanceState) {
-        super.initWidgets(savedInstanceState);
-        mTabs = new Button[3];
-        mTabs[0] = (Button) findViewById(R.id.btn_main);
-        mTabs[1] = (Button) findViewById(R.id.btn_message);
-        mTabs[2] = (Button) findViewById(R.id.btn_me);
-        conversationListFragment = new ChatConversationListFragment();
-        mainFragment = new HomeFragment();
-        meFragment = new MeFragment();
-        fragments = new Fragment[]{mainFragment, conversationListFragment, meFragment};
-        mTabs[0].setSelected(true);
-        // add and show first fragment
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mainFragment)
-                .add(R.id.fragment_container, conversationListFragment)
-                .add(R.id.fragment_container, meFragment)
-                .hide(conversationListFragment)
-                .hide(meFragment)
-                .show(mainFragment)
-                .commitAllowingStateLoss();
+        //super.initWidgets(savedInstanceState);
+        EventBus.getDefault().register(this);
+        fm = getSupportFragmentManager();
+        BaseFragment baseFragment;
+        String tag;
+//        if (AppUtils.isFirstLogin()) {
+//            baseFragment = new WelcomeFragment();
+//            tag = baseFragment.getMTag();
+//            AppUtils.firstLogin();
+//        } else {
+//            baseFragment = new SplashFragment();
+//            tag = baseFragment.getMTag();
+//        }
+        baseFragment = new LoginFragment();
+        //  baseFragment = new MainTabFragment();
+        tag = baseFragment.getMTag();
+        mFragments.add(tag);
+        fm.beginTransaction().add(R.id.main_container, baseFragment, tag).addToBackStack(tag).commitAllowingStateLoss();
     }
 
-    //
-//    @Override
-//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//        super.onSaveInstanceState(outState, outPersistentState);
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 防止fragment重叠
+     *
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.v("MainAcitity", "onSaveInstanceState" + outState);
-        //super.onSaveInstanceState(outState);   //将这一行注释掉，阻止activity保存fragment的状态
+        //如果用以下这种做法则不保存状态，再次进来的话会显示默认tab
+        //总是执行这句代码来调用父类去保存视图层的状态
+        //super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -80,98 +97,128 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
         return new MainPresenter(this);
     }
 
-    /**
-     * 重写返回键
-     *
-     * @param keyCode
-     * @param event
-     * @return
-     */
+    //监听返回键
+    //按返回键，Fragment要不要禁用返回键
+    //假如Fragment不控制返回键--->MainActivity 管理东西---->mFragments.pollLast();fm.popBackStack
+    //                                                      只有一个Fragment情况下，
+    //                                                      MainActivty.finish();
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (SystemClock.uptimeMillis() - mExitTime > Constant.appFinal.EXIT_TIME_GAP) {
-                Toast.makeText(this, "再按一次退出法律", Toast.LENGTH_SHORT).show();
-                mExitTime = SystemClock.uptimeMillis();
-            } else {
-                finish();
+        if (KeyEvent.KEYCODE_BACK == keyCode) {// 返回键处理
+            if (!backCurrentFragment()) {
+                goBack();
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * onTabClicked 点击下面的按钮，跳转事件
-     */
-    public void onTabClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_main:
-                index = 0;
-                //改变底部的菜单栏
-                //1.改变布局的颜色
-                relativeLayout_bottom.setBackgroundColor(ContextCompat.getColor(this, R.color.color_transparent));
-                // 2.动态设置按钮 的图片
-                setDrawable(mTabs[0], R.drawable.zhuye2);
-                setDrawable(mTabs[1], R.drawable.liaotian1);
-                setDrawable(mTabs[2], R.drawable.wode1);
-                //3.动态设置按钮的文字颜色
-                setButtonTextColor(mTabs[0], R.color.colorPrimary);
-                setButtonTextColor(mTabs[1], R.color.color_white);
-                setButtonTextColor(mTabs[2], R.color.color_white);
-                break;
-            case R.id.btn_message:
-                index = 1;
-                //改变底部的菜单栏
-                //1.改变布局的颜色
-                relativeLayout_bottom.setBackgroundColor(ContextCompat.getColor(this, R.color.color_white));
-                // 2.动态设置按钮 的图片
-                setDrawable(mTabs[0], R.drawable.zhuye3);
-                setDrawable(mTabs[1], R.drawable.liaotian2);
-                setDrawable(mTabs[2], R.drawable.wode3);
-                //3.动态设置按钮的文字颜色
-                setButtonTextColor(mTabs[0], R.color.main_bottom_unselect);
-                setButtonTextColor(mTabs[1], R.color.colorPrimary);
-                setButtonTextColor(mTabs[2], R.color.main_bottom_unselect);
-                break;
-            case R.id.btn_me:
-                index = 2;
-                relativeLayout_bottom.setBackgroundColor(ContextCompat.getColor(this, R.color.color_white));
-                // 2.动态设置按钮 的图片
-                setDrawable(mTabs[0], R.drawable.zhuye3);
-                setDrawable(mTabs[1], R.drawable.liaotian3);
-                setDrawable(mTabs[2], R.drawable.wode2);
-                //3.动态设置按钮的文字颜色
-                setButtonTextColor(mTabs[0], R.color.main_bottom_unselect);
-                setButtonTextColor(mTabs[1], R.color.main_bottom_unselect);
-                setButtonTextColor(mTabs[2], R.color.colorPrimary);
-                break;
+    // 处理默认返回的
+    private void goBack() {
+        if (getCurrentFrament() instanceof ShezhiFragment) {
+            Log.e("MainActivity", "返回键退回到我的页面");
+            StatusBarCompat.translucentStatusBar(this);
+        } else if (getCurrentFrament() instanceof SelfFragment) {
+            Log.e("MainActivity", "返回键退回到我的页面");
+            StatusBarCompat.translucentStatusBar(this);
+        } else if (getCurrentFrament() instanceof FeedBackFragment) {
+            Log.e("MainActivity", "返回键退回到我的页面");
+            StatusBarCompat.translucentStatusBar(this);
+        } else if (getCurrentFrament() instanceof IDRegistFragment) {
+            Log.e("MainActivity", "返回键退回到我的页面");
+            StatusBarCompat.translucentStatusBar(this);
+        } else if (getCurrentFrament() instanceof FragmentSeniority) {
+            Log.e("MainActivity", "返回键退回到我的页面");
+            StatusBarCompat.translucentStatusBar(this);
         }
-        FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
-        for (int i = 0; i < fragments.length; i++) {
-            if (i != index) {
-                trx.hide(fragments[i]);
+        int count = fm.getBackStackEntryCount();
+        if (count == 1) {
+            // 只存在一个Fragment时候，进行二次提醒
+            if (SystemClock.uptimeMillis() - mExitTime > EXIT_TIME_GAP) {
+                Toast.makeText(this, "再按一次，退出本程序", Toast.LENGTH_SHORT).show();
+                mExitTime = SystemClock.uptimeMillis();
             } else {
-                trx.show(fragments[i]);
+                // 假如多个Activity，清除多个Activity
+                MainActivity.this.finish();
             }
+        } else {
+            if (mFragments.size() > 0) {
+                mFragments.pollLast();
+            }
+            fm.popBackStack();// 把Framgent移除出去
         }
-        trx.commitAllowingStateLoss();
     }
 
-    /**
-     * 动态设置图片
-     */
-    private void setDrawable(Button button, int drawableId) {
-        Drawable drawable = ContextCompat.getDrawable(this, drawableId);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//int left, int top, int right, int bottom
-        button.setCompoundDrawables(null, drawable, null, null);
+    //Fragment控制返回键
+    public boolean backCurrentFragment() {
+        BaseFragment currFragment = getCurrentFrament();
+        if (currFragment != null) {
+            return currFragment.onBack();
+        }
+        return false;
     }
 
-    /**
-     * 动态设置按钮文字颜色
-     */
-    private void setButtonTextColor(Button button, int color) {
-        button.setTextColor(ContextCompat.getColor(this, color));
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NavFragmentEvent event) {
+        BaseFragment fragment = event.fragment;
+        Bundle bundle = event.bundle;
+        startFragment(fragment, bundle);
     }
 
+    public void startFragment(BaseFragment fragment, Bundle bundle) {
+        if (fragment == null) {
+            throw new IllegalArgumentException("fragment is null");
+        }
+        if (lastClickTime + LAST_CLICK_GAP < SystemClock.uptimeMillis()) {
+            // 1 获取tag
+            String tag = fragment.getMTag();
+            // 2 获取事务
+            FragmentTransaction ft = fm.beginTransaction();
+            // 3 控制Fragment 的动画
+//          ft.setCustomAnimations(R.anim.slide_left_enter, 0, 0,R.anim.slide_right_exit);
+            // 4 添加Fragment
+            ft.add(R.id.main_container, fragment, tag);
+            if (bundle != null) {
+                fragment.setArguments(bundle);
+            }
+            // 5 隐藏当前或者finish的Fragment
+            BaseFragment currFragment = getCurrentFrament();
+            if (currFragment != null) {
+                if (currFragment.finish()) {
+                    mFragments.pollLast();
+                   // fm.popBackStack();//finish
+                    fm.popBackStackImmediate();
+//                    //由于当前的Fragment，被弹出去，需要当前的Fragment已经变化角色，需要重新隐藏
+                    currFragment = (BaseFragment) getCurrentFrament();
+                    if (currFragment != null) {
+                        ft.hide(currFragment);
+                    }
+                } else {
+                    ft.hide(currFragment);// hide
+                }
+            }
+            // 6 把tag 添加到mFragments
+            mFragments.add(tag);
+            // 7 添加到返回栈
+            ft.addToBackStack(tag);
+            // 8 添加事务
+            ft.commit();
+            lastClickTime = SystemClock.uptimeMillis();
+        }
+    }
+
+    // 怎么获取当前的Fragment
+    public BaseFragment getCurrentFrament() {
+        return mFragments.size() > 0 ? (BaseFragment) fm.findFragmentByTag(mFragments.peekLast()) : null;
+    }
+
+    @Override
+    public void onShowToast(String message, int i) {
+
+    }
+
+    @Override
+    public void navigateToFragment(BaseFragment baseFragment, Bundle bundle) {
+
+    }
 }

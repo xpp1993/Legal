@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <declare-styleable name="MessageGroupAttr">
+        <!--可显示的最大行数-->
+        <attr name="maxLineNumber" format="integer"/>
+
+        <!--信息体左边距-->
+        <attr name="item_margin_left" format="dimension" />
+        <!--信息体上边距-->
+        <attr name="item_margin_top" format="dimension" />
+        <!--信息体右边距-->
+        <attr name="item_margin_right" format="dimension" />
+        <!--信息体底边距-->
+        <attr name="item_margin_bottom" format="dimension" />
+
+        <!--信息体左内间距-->
+        <attr name="item_padding_left" format="dimension" />
+        <!--信息体上内间距-->
+        <attr name="item_padding_top" format="dimension" />
+        <!--信息体右内间距-->
+        <attr name="item_padding_right" format="dimension" />
+        <!--信息体底内间距-->
+        <attr name="item_padding_bottom" format="dimension" />
+
+        <!--信息体背景资源-->
+        <attr name="item_background" format="reference" />
+
+        <!--信息体message部分文字颜色-->
+        <attr name="item_text_color" format="color" />
+        <!--信息体user部分文字颜色-->
+        <attr name="item_user_color" format="color" />
+        <!--信息体user部分文字选中时高亮颜色-->
+        <attr name="item_highlight_color" format="color" />
+        <!--信息体文字字号-->
+        <attr name="item_text_size" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="MyGridlayoutAttr">
+        <attr name="columnNumber" format="integer" />
+        <attr name="maxItemCount" format="integer" />
+        <attr name="itemMarginLeft" format="dimension" />
+        <attr name="itemMarginTop" format="dimension" />
+        <attr name="itemMarginRight" format="dimension" />
+        <attr name="itemMarginBottom" format="dimension" />
+    </declare-styleable>
+</resources>

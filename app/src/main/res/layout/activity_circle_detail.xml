@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_me_bg">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/circle_detail_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        hyphenate:titleBarLeftImage="@mipmap/back"
+        hyphenate:titleBarTitle="详情" />
+
+    <ScrollView
+        android:id="@+id/detail_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/circle_detail_title_bar">
+        <include layout="@layout/comment_item" />
+    </ScrollView>
+
+    <include
+        layout="@layout/circle_coment_rl"
+        android:visibility="visible" />
+</RelativeLayout>

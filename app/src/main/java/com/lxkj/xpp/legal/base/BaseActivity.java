@@ -1,14 +1,10 @@
 package com.lxkj.xpp.legal.base;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-
-import com.lxkj.xpp.legal.utils.ActivityCollector;
-import com.lxkj.xpp.legal.utils.CommonUtils;
+import android.util.Log;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -29,7 +25,6 @@ public abstract class BaseActivity<P extends BaseMvpPresenter> extends AppCompat
         mUnbinder = ButterKnife.bind(this);
         mPresenter = setPresenter();
         initWidgets(savedInstanceState);
-        ActivityCollector.addActivity(this);
     }
 
     @Override
@@ -39,9 +34,34 @@ public abstract class BaseActivity<P extends BaseMvpPresenter> extends AppCompat
         if (mPresenter != null) {
             mPresenter.detach();
         }
-        ActivityCollector.removeActivity(this);
+        //退出登录
+        signOut();
     }
 
+    /**
+     * 退出登录
+     */
+    private void signOut() {
+        // 调用sdk的退出登录方法，第一个参数表示是否解绑推送的token，没有使用推送或者被踢都要传false
+        EMClient.getInstance().logout(false, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                Log.i("lzan13", "logout success");
+                // 调用退出成功，结束app
+                //finish();
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                Log.i("lzan13", "logout error " + i + " - " + s);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
+    }
 
     /**
      * 获取activity的布局资源
@@ -63,22 +83,4 @@ public abstract class BaseActivity<P extends BaseMvpPresenter> extends AppCompat
     protected void initWidgets(Bundle savedInstanceState) {
     }
 
-    /**
-     * 动态的设置状态栏  实现沉浸式状态栏
-     */
-    public void initState(LinearLayout linear_bar) {
-
-        //当系统版本为4.4或者4.4以上时可以使用沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            linear_bar.setVisibility(View.VISIBLE);
-            //获取到状态栏的高度
-            int statusHeight = CommonUtils.getStatusBarHeight();
-            //动态的设置隐藏布局的高度
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) linear_bar.getLayoutParams();
-            params.height = statusHeight;
-            linear_bar.setLayoutParams(params);
-        }
-    }
 }

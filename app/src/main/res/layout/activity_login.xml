@@ -1,131 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <include layout="@layout/bar2" />
-
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp">
-        <!--
-        1.siRadius corner radius in dp
-        2.siSquare set width and height to the minimum of the given values true|false-->
-        <com.github.siyamed.shapeimageview.RoundedImageView
-            android:layout_width="98dp"
-            android:layout_height="98dp"
-            android:layout_centerHorizontal="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/beijing"
-            app:siRadius="10dp"
-            app:siSquare="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="37dp"
-        android:background="@color/color_white">
-
-        <LinearLayout
-            android:id="@+id/login_phone_ll"
+        android:background="#F7F7F7"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+        <com.hyphenate.easeui.widget.EaseTitleBar
+            android:id="@+id/login_title_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="26dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/user" />
-
-            <EditText
-                android:id="@+id/login_phone_et"
-                style="@style/CommonStyle.input_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/colorPrimary"
-                android:hint="请输入用户名/手机号码" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/login_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/login_phone_ll"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/SplitLine" />
+            android:layout_height="@dimen/px86dp"
+            hyphenate:titleBarTitle="@string/login_name" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/login_view"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="26dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/password" />
-
-            <EditText
-                android:id="@+id/login_password_et"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                style="@style/CommonStyle.input_edittext"
-                android:hint="请输入密码"
-                android:textColor="@color/colorPrimary"
-                android:inputType="textPassword" />
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorHeight="@dimen/px6dp"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabTextColor="#AAAAAA" />
         </LinearLayout>
-    </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:id="@+id/login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_background"
-        android:text="登录"
-        android:textColor="@color/bar2"
-        android:textSize="17sp" />
-
-    <RelativeLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/login_vp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:id="@+id/login_pw_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="忘记密码"
-            android:textColor="@color/color_login_bottom"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/login_phone_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="手机号快捷登录"
-            android:textColor="@color/color_login_bottom"
-            android:textSize="12sp" />
-    </RelativeLayout>
+        android:layout_below="@id/tabs"
+        android:scrollbars="none" />
 </LinearLayout>

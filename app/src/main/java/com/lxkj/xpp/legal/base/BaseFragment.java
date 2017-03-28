@@ -1,16 +1,12 @@
 package com.lxkj.xpp.legal.base;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-
-import com.lxkj.xpp.legal.utils.CommonUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -20,80 +16,95 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment<P extends BaseMvpPresenter> extends Fragment implements BaseMvpView {
-    //是否可见
-    protected boolean isVisible = false;
-    //标志位，标志Fragment已经初始化完成。
-    public boolean isPrepared = false;
+    protected View view;
+
+    private int fId;
+
     private Unbinder mUnbinder;
     protected P mPresenter;
+
+    public BaseFragment() {
+        fId++;
+    }
+
+    public String getMTag() {
+        return this.getClass().getName() + fId;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(setContentViewId(), container, false);
+        view = inflater.inflate(setContentViewId(), container, false);
         mUnbinder = ButterKnife.bind(this, view);
         mPresenter = setPresenter();
-        initWidgets(savedInstanceState);
-        isVisible = savedInstanceState != null && savedInstanceState.getBoolean("isVisible", false);
-        onGetBunndle(getArguments());
+        initWidgets();
+        onGetBundle(getArguments());
+        Log.e("BaseFragment", "----onCreateView----");
         return view;
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        initMState();
+        Log.e("BaseFragment", "----onViewCreated----");
+    }
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       // initListener();
+        initData();
+        Log.e("BaseFragment", "----onActivityCreated----");
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        isPrepared = true;
-        if (!isVisible && getUserVisibleHint())
-            onFragmentVisibleChange(true);
-        if (isVisible && !getUserVisibleHint()) {
-            onFragmentVisibleChange(true);
-        }
+    public void onResume() {
+        super.onResume();
+        Log.e("BaseFragment", "----onResume()----");
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (!isPrepared)
-            return;
-        if (isVisible && !getUserVisibleHint()) {
-            onFragmentVisibleChange(false);
-        } else if (!isVisible && getUserVisibleHint()) {
-            onFragmentVisibleChange(true);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("isVisible", isVisible);
+    public void onStart() {
+        super.onStart();
+        Log.e("BaseFragment", "----onStart()----");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mUnbinder.unbind();
-        mPresenter.detach();
+        if (mUnbinder != null)
+            mUnbinder.unbind();
+        if (mPresenter != null)
+            mPresenter.detach();
     }
 
-    protected void onFragmentVisibleChange(boolean isVisible) {
-        this.isVisible = isVisible;
+    protected abstract void initWidgets();
+
+    protected abstract void initData();
+
+    // 子类初始化一些状态
+    protected void initMState() {
+
     }
 
-    // Fragment 直接bundle 的传递
-    public void onGetBunndle(Bundle arguments) {
+    // 可以获取上一个Fragment传过来的数据
+    protected void onGetBundle(Bundle bundle) {
 
     }
 
-//    /**
-//     * 监听事件
-//     */
-//    protected abstract void initListener();
+    //把控制返回键的权利交给了Fragment
+    public boolean onBack() {
+        return false;
+    }
+
+    // 子类可以控制生命
+    public boolean finish() {
+        return false;
+    }
+
+    public View getRootView() {
+        return view;
+    }
 
     /**
      * 设置presenter层对象
@@ -103,36 +114,10 @@ public abstract class BaseFragment<P extends BaseMvpPresenter> extends Fragment 
     protected abstract P setPresenter();
 
     /**
-     * 初始化组件工作
-     *
-     * @param savedInstanceState
-     */
-    protected abstract void initWidgets(Bundle savedInstanceState);
-
-    /**
      * 获取Fragment的布局ID
      *
      * @return
      */
     protected abstract int setContentViewId();
 
-    /**
-     * 动态的设置状态栏  实现沉浸式状态栏
-     */
-    public void initState(LinearLayout linear_bar) {
-
-        //当系统版本为4.4或者4.4以上时可以使用沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            linear_bar.setVisibility(View.VISIBLE);
-            //获取到状态栏的高度
-            int statusHeight = CommonUtils.getStatusBarHeight();
-            //动态的设置隐藏布局的高度
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) linear_bar.getLayoutParams();
-            // LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) linear_bar.getLayoutParams();
-            params.height = statusHeight;
-            linear_bar.setLayoutParams(params);
-        }
-    }
 }

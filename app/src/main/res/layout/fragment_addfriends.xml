@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_me_bg"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/addfriends_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        hyphenate:titleBarLeftImage="@mipmap/fanhui"
+        hyphenate:titleBarTitle="添加好友" />
+
+    <EditText
+        android:id="@+id/fragment_add_friends"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/et_change_self_info"
+        android:hint="请输入好友的名称"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/color_gray"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/btn_add_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background3"
+            android:text="添加好友"
+            android:textColor="@color/color_white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_delete_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background3"
+            android:text="删除好友"
+            android:textColor="@color/color_white"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>
