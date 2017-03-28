@@ -21,6 +21,7 @@
         <include layout="@layout/comment_item" />
     </ScrollView>
 
+    
     <include
         layout="@layout/circle_coment_rl"
         android:visibility="visible" />
