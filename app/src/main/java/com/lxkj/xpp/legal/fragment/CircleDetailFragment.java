@@ -1,7 +1,7 @@
 package com.lxkj.xpp.legal.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.lxkj.xpp.legal.R;
+import com.lxkj.xpp.legal.app.MyApplication;
 import com.lxkj.xpp.legal.base.BaseFragment;
 import com.lxkj.xpp.legal.constant.Constant;
 import com.lxkj.xpp.legal.model.bean.CommentsBean;
@@ -61,7 +62,6 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
     private int articleId;
     private int type;
     private CommentsBean commentsBean;
-    private Handler mHandler;
 
     @Override
     protected void initWidgets() {
@@ -70,6 +70,7 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
         easeTitleBar.getLeftLayout().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //返回帖书列表页
                 getActivity().onBackPressed();
             }
         });
@@ -87,8 +88,6 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
 
     @Override
     protected void initData() {
-        mHandler=new Handler();
-        scrollView.smoothScrollTo(0,0);
         mCommitRelativeLayout.findViewById(R.id.commit_bt).setOnClickListener(this);
     }
 
@@ -117,10 +116,13 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
                     commentImageView, commentCountTextView, messageGroup, 6);
             CommonUtils.closeKeyMap(getActivity());//评论后更新评论列表后，关闭键盘,清空edittext
             editText_comment.setText(null);
-            mHandler.postDelayed(srcollRunnable, 500);
+            type = Constant.appFinal.issue;
+            //发送item更新的广播,item数据可能更新
+            Intent intent = new Intent();
+            intent.setAction(MyApplication.CIRCLEFRAGMENT_TAG);
+            intent.putExtra("articleId", articleId);
+            getActivity().sendBroadcast(intent);
         }
-        //发送一个广播更新当前Item
-        EventBus.getDefault().post(articleId);
     }
 
 
@@ -145,22 +147,6 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
         if (id == Constant.appFinal.replay) {
             commentsBean = (CommentsBean) bundle.getSerializable("commentsBean");
         }
-    }
-
-    /**
-     * 滚动到最底部
-     */
-    private Runnable srcollRunnable = new Runnable() {
-        @Override
-        public void run() {
-            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        }
-    };
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacks(srcollRunnable);
     }
 
     @Override

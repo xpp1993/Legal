@@ -1,5 +1,6 @@
 package com.lxkj.xpp.legal.fragment;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MotionEvent;
@@ -13,9 +14,11 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lxkj.xpp.legal.R;
 import com.lxkj.xpp.legal.adapter.CircleListItemAdapter;
 import com.lxkj.xpp.legal.adapter.ItemViewHolder;
+import com.lxkj.xpp.legal.app.MyApplication;
 import com.lxkj.xpp.legal.base.BaseFragment;
 import com.lxkj.xpp.legal.constant.Constant;
 import com.lxkj.xpp.legal.event.NavFragmentEvent;
+import com.lxkj.xpp.legal.listener.CircleListBroadcast;
 import com.lxkj.xpp.legal.listener.IssueOrReplyDo;
 import com.lxkj.xpp.legal.listener.OnItemClickListener;
 import com.lxkj.xpp.legal.model.bean.CircleDetailBean;
@@ -27,8 +30,6 @@ import com.lxkj.xpp.legal.utils.ToastUtlis;
 import com.lxkj.xpp.legal.view.CircleView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     private boolean isRefresh;
     private final int REQUIRE_CODE_MESSAGE_NEW = 0X01, REQUIRE_CODE_MESSAGE_OLD = 0X02;
     private ItemViewHolder itemViewHolder;
+    private ItemViewHolder viewHolder;
     @BindView(R.id.commit_input_rl)
     RelativeLayout mCommitRelativeLayout;
     @BindView(R.id.commit_et)
@@ -59,12 +61,13 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     private int articleId;
     private CommentsBean commentsBean;
     int comment_type;
+    private CircleListBroadcast circleListBroadcast;
 
     @Override
     protected void initWidgets() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(CommonUtils.getContext()));
         mCommitRelativeLayout.findViewById(R.id.commit_bt).setOnClickListener(this);
-        EventBus.getDefault().register(this);
+        initAdapter();
     }
 
     @Override
@@ -76,7 +79,7 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
             }
         });
         isLoadingMore = false;
-        initAdapter();
+        registerReceiver();
     }
 
     @Override
@@ -109,6 +112,7 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     public void updataUI(Bundle bundle, int id) {
         if (bundle == null)
             return;
+        itemViewHolder = viewHolder;
         switch (id) {
             case Constant.ID.PUBLIS_DETAIL://获取帖书详情
                 CircleDetailBean circleDetailBean = (CircleDetailBean) bundle.getSerializable("circleDetailBean");
@@ -139,15 +143,6 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         }
     }
 
-    /**
-     * 接受来自详情页的广播，可能在详情页评论了，刷新当前item
-     *
-     * @param articleId
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(int articleId) {
-        mPresenter.loadPublishDetail(CommonUtils.getContext(), articleId);
-    }
 
     @Override
     public void onLoadingOrRefreshFailed() {
@@ -167,20 +162,7 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
-        itemAdapter = new CircleListItemAdapter(CommonUtils.getContext(), new IssueOrReplyDo() {
-            @Override
-            public void issueorReply(ItemViewHolder viewHolder, int type, int acticleId, CommentsBean commentsBean) {
-                itemViewHolder = viewHolder;
-                comment_type = type;
-                CircleFragment.this.articleId = acticleId;
-                CircleFragment.this.commentsBean = commentsBean;
-                //弹出输入框,打开键盘
-                editText_comment.requestFocus();
-                mCommitRelativeLayout.setVisibility(View.VISIBLE);
-                CommonUtils.openKeyboard(getActivity());
-            }
-
-        });
+        itemAdapter = new CircleListItemAdapter(CommonUtils.getContext(), issueOrReplyDo);
         itemAdapter.setOnItemClickListener(new OnItemClickListener<CircleListBean.DataBean.DataListBean>() {
             @Override
             public void onClick(CircleListBean.DataBean.DataListBean item) {
@@ -207,6 +189,24 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         onRefresh();
     }
 
+    /**
+     * 评论、回复后需要做的事情
+     */
+    private IssueOrReplyDo issueOrReplyDo = new IssueOrReplyDo() {
+        @Override
+        public void issueorReply(ItemViewHolder viewHolder, int type, int acticleId, CommentsBean commentsBean) {
+            CircleFragment.this.viewHolder = viewHolder;
+            itemViewHolder = CircleFragment.this.viewHolder;
+            comment_type = type;
+            CircleFragment.this.articleId = acticleId;
+            CircleFragment.this.commentsBean = commentsBean;
+            //弹出输入框,打开键盘
+            editText_comment.requestFocus();
+            mCommitRelativeLayout.setVisibility(View.VISIBLE);
+            CommonUtils.openKeyboard(getActivity());
+        }
+
+    };
 
     /**
      * 刷新
@@ -251,9 +251,25 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         }
     }
 
+    //注册广播的方法
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        try {
+            if (circleListBroadcast != null) {
+                getActivity().unregisterReceiver(circleListBroadcast);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        circleListBroadcast = new CircleListBroadcast(mPresenter);
+        filter.addAction(MyApplication.CIRCLEFRAGMENT_TAG);
+        getActivity().registerReceiver(circleListBroadcast, filter);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if (circleListBroadcast != null)
+            getActivity().unregisterReceiver(circleListBroadcast);
     }
 }

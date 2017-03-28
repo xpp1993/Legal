@@ -79,8 +79,8 @@ public interface Constant {
         int PULISH_CICLE = 0x10;//发表帖书
         int REAL_PAGE_CONSTANT = 0x11;//平台常量获取
         int LOAD_CIRCLE = 0x12;//加载帖书页
-        int PUBLIS_DETAIL=0x13;//帖书详情
-       // int ISSUE_REPLAY = 0x13;//评论，发表评论
+        int PUBLIS_DETAIL = 0x13;//帖书详情
+        // int ISSUE_REPLAY = 0x13;//评论，发表评论
         String friend_uuid = "friend_uuid";
     }
 
@@ -104,6 +104,9 @@ public interface Constant {
         String PUBLSH_CIRCLE = BASE_URL + "legal/api/article/publish";//发布帖书
         String LOAD_CIRCLE = BASE_URL + "legal/api/article/article_list";//帖书列表
         String ISSUE_REPLAY = BASE_URL + "legal/api/article/discuss";//评论，回复评论
-        String PUBLISH_DETAIL=BASE_URL+"legal/api/article/article_detail";//帖书详情
+        String PUBLISH_DETAIL = BASE_URL + "legal/api/article/article_detail";//帖书详情
+        String DELETE_COMMENT = BASE_URL + "legal/api/article/delete_comment";//删除评论，commentId
+        String DELETE_TIESHU = BASE_URL + "legal/api/article/delete_article?articleId=48";//删除帖书，articleId
+        String USER_INFO=BASE_URL+"legal/api/power/common/user_info?uid=1010002";
     }
 }

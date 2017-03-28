@@ -8,6 +8,7 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.lxkj.xpp.legal.chat.DemoHelper;
+import com.lxkj.xpp.legal.fragment.CircleFragment;
 import com.lxkj.xpp.legal.model.bean.CircleListBean;
 import com.lxkj.xpp.legal.utils.LocationUtils;
 import com.lxkj.xpp.legal.utils.okhttp.OkHttpUtils;
@@ -34,7 +35,7 @@ public class MyApplication extends Application {
     public static PreferencesUtils preferencesUtils;
     private static final String TAG = "MyApplication";
     public LocationUtils locationUtils;
-
+    public static final String CIRCLEFRAGMENT_TAG = CircleFragment.class.getSimpleName();
 
     @Override
     public void onCreate() {

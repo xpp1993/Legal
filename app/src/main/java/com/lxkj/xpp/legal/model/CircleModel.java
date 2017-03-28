@@ -186,4 +186,14 @@ public class CircleModel implements BaseMvpModel {
 
                 });
     }
+
+    /**
+     * 删除评论
+     * @param context
+     * @param articleId
+     * @param listener
+     */
+    public void deleteComment(Context context, int articleId, final CirCleCallBackListener listener){
+
+    }
 }
