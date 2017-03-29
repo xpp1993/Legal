@@ -181,43 +181,16 @@ public class MessageGroup extends ViewGroup implements View.OnClickListener, Vie
 
     public void refresh(List<CommentsBean> commentsBeen) {
         removeAllViews();
-        for (int i = 0; i < commentsBeen.size() && i < maxLineNumber; i++) {
-            final CommentsBean entity = commentsBeen.get(i);
-            int point = 0;
-            final TextView textView = new TextView(getContext());
+//        if (commentsBeen == null || commentsBeen.size() < 0 || commentsBeen.equals("empty")) {
+//
+//        } else {
+            for (int i = 0; i < commentsBeen.size() && i < maxLineNumber; i++) {
+                final CommentsBean entity = commentsBeen.get(i);
+                int point = 0;
+                final TextView textView = new TextView(getContext());
 
-            SpannableStringBuilder builder = new SpannableStringBuilder();
-            builder.append(entity.getDiscussNickName());
-            builder.setSpan(new ClickableSpan() {
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    ds.setColor(itemUserColor);
-                }
-
-                @Override
-                public void onClick(View widget) {
-                    boolean tag = (boolean) widget.getTag(KEY_SHORT) || (boolean) widget.getTag(KEY_LONG);
-                    widget.setTag(KEY_LONG, false);
-                    if (!tag) {
-                        widget.setTag(KEY_SHORT, true);
-                        if (mOnEntityClickListener != null) {
-                            mOnEntityClickListener.onFromClicked(entity);
-                        }
-                    }
-                }
-            }, 0, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            //  if (entity.getReplyNickName() != null) {
-            if ("empty".equals(entity.getReplyNickName()) || entity.getReplyNickName() == null || "".equals(entity.getReplyNickName())) {
-
-            } else {
-                point = builder.length();
-                builder.append(getResources().getString(R.string.return_text));
-                builder.setSpan(new ForegroundColorSpan(itemTextColor), point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                point = builder.length();
-                // builder.append(entity.getDiscussNickName().toString());
-                builder.append(entity.getReplyNickName().toString().trim());
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+                builder.append(entity.getDiscussNickName());
                 builder.setSpan(new ClickableSpan() {
                     @Override
                     public void updateDrawState(TextPaint ds) {
@@ -231,39 +204,71 @@ public class MessageGroup extends ViewGroup implements View.OnClickListener, Vie
                         if (!tag) {
                             widget.setTag(KEY_SHORT, true);
                             if (mOnEntityClickListener != null) {
-                                mOnEntityClickListener.onTargetClicked(entity);
+                                mOnEntityClickListener.onFromClicked(entity);
                             }
                         }
-
                     }
-                }, point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }, 0, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+                //  if (entity.getReplyNickName() != null) {
+                if ("empty".equals(entity.getReplyNickName()) || entity.getReplyNickName() == null || "".equals(entity.getReplyNickName())) {
+
+                } else {
+                    point = builder.length();
+                    builder.append(getResources().getString(R.string.return_text));
+                    builder.setSpan(new ForegroundColorSpan(itemTextColor), point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    point = builder.length();
+                    // builder.append(entity.getDiscussNickName().toString());
+                    builder.append(entity.getReplyNickName().toString().trim());
+                    builder.setSpan(new ClickableSpan() {
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            ds.setColor(itemUserColor);
+                        }
+
+                        @Override
+                        public void onClick(View widget) {
+                            boolean tag = (boolean) widget.getTag(KEY_SHORT) || (boolean) widget.getTag(KEY_LONG);
+                            widget.setTag(KEY_LONG, false);
+                            if (!tag) {
+                                widget.setTag(KEY_SHORT, true);
+                                if (mOnEntityClickListener != null) {
+                                    mOnEntityClickListener.onTargetClicked(entity);
+                                }
+                            }
+
+                        }
+                    }, point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                }
+                point = builder.length();
+                builder.append(getResources().getString(R.string.split_text)).append(entity.getContent());
+                builder.setSpan(new ForegroundColorSpan(itemTextColor), point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                layoutParams.leftMargin = itemMarginLeft;
+                layoutParams.topMargin = itemMarginTop;
+                layoutParams.rightMargin = itemMarginRight;
+                layoutParams.bottomMargin = itemMarginBottom;
+                textView.setLayoutParams(layoutParams);
+                textView.setTextSize(DisplayUtils.px2sp(getContext(), itemTextSize));
+                textView.setPadding(itemPaddingLeft, itemPaddingTop, itemPaddingRight, itemPaddingBottom);
+                textView.setText(builder);
+                textView.setBackgroundResource(pressedBack);
+                textView.setOnClickListener(this);
+                textView.setOnLongClickListener(this);
+                textView.setTag(KEY_SHORT, false);
+                textView.setTag(KEY_LONG, false);
+                textView.setTag(entity);
+                textView.setHighlightColor(itemHighlightColor);
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+                addView(textView);
             }
-            point = builder.length();
-            builder.append(getResources().getString(R.string.split_text)).append(entity.getContent());
-            builder.setSpan(new ForegroundColorSpan(itemTextColor), point, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            invalidate();
 
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-            layoutParams.leftMargin = itemMarginLeft;
-            layoutParams.topMargin = itemMarginTop;
-            layoutParams.rightMargin = itemMarginRight;
-            layoutParams.bottomMargin = itemMarginBottom;
-            textView.setLayoutParams(layoutParams);
-            textView.setTextSize(DisplayUtils.px2sp(getContext(), itemTextSize));
-            textView.setPadding(itemPaddingLeft, itemPaddingTop, itemPaddingRight, itemPaddingBottom);
-            textView.setText(builder);
-            textView.setBackgroundResource(pressedBack);
-            textView.setOnClickListener(this);
-            textView.setOnLongClickListener(this);
-            textView.setTag(KEY_SHORT, false);
-            textView.setTag(KEY_LONG, false);
-            textView.setTag(entity);
-            textView.setHighlightColor(itemHighlightColor);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-            addView(textView);
-        }
-        invalidate();
     }
 
     public void setOnEntityClickListener(OnCommentEntityClickListener onEntityClickListener) {

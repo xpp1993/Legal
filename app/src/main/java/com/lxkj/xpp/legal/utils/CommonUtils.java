@@ -13,7 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+
+import android.content.ClipboardManager;
+
 import com.lxkj.xpp.legal.R;
 import com.lxkj.xpp.legal.app.MyApplication;
 import com.lxkj.xpp.legal.constant.Constant;
@@ -24,14 +26,11 @@ import com.lxkj.xpp.legal.utils.okhttp.PreferencesUtils;
 import com.lxkj.xpp.legal.utils.okhttp.callback.GenericsCallback;
 import com.lxkj.xpp.legal.utils.okhttp.callback.JsonGenericsSerializator;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -257,7 +256,7 @@ public class CommonUtils {
      */
     public static void closeKeyMap(FragmentActivity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null&&activity.getCurrentFocus()!=null&&activity.getCurrentFocus().getWindowToken()!=null)
+        if (inputMethodManager != null && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null)
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -303,4 +302,15 @@ public class CommonUtils {
         getContext().startActivity(intent);
     }
 
+    /**
+     * 复制内容到剪切板
+     *
+     * @param context
+     * @param message
+     */
+    public static void copyMessage(Context context, String message) {
+        //获得剪贴板管理服务
+        ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setText(message);
+    }
 }

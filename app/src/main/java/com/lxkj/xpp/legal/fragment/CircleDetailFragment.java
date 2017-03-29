@@ -61,6 +61,7 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
     EaseTitleBar easeTitleBar;
     private int articleId;
     private int type;
+    private String uid;
     private CommentsBean commentsBean;
 
     @Override
@@ -82,6 +83,15 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
         if (bundle == null)
             return;
         articleId = bundle.getInt("articleId");
+        uid = bundle.getString("uid");
+        if (uid.equals(CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.uid)))
+            easeTitleBar.setRightImageResource(com.hyphenate.easeui.R.drawable.ease_mm_title_remove);
+        easeTitleBar.getRightLayout().setOnClickListener(new View.OnClickListener() {//删除帖书
+            @Override
+            public void onClick(View v) {
+                mPresenter.deteteTieshu(CommonUtils.getContext(), articleId);
+            }
+        });
         type = Constant.appFinal.issue;
         mPresenter.loadPublishDetail(CommonUtils.getContext(), articleId);
     }
@@ -109,10 +119,10 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
      */
     @Override
     public void updataUI(Bundle bundle, int id) {
-        if (bundle == null)
-            return;
         if (id == Constant.ID.PUBLIS_DETAIL) {//帖书详情标志
-            mPresenter.setCircleDetailUI(bundle, headCircleImageView, imageGridView, nicknameTextView, whatAgoTextView, messageTextView,
+            if (bundle == null)
+                return;
+            mPresenter.setCircleDetailUI(getActivity(), bundle, headCircleImageView, imageGridView, nicknameTextView, whatAgoTextView, messageTextView,
                     commentImageView, commentCountTextView, messageGroup, 6);
             CommonUtils.closeKeyMap(getActivity());//评论后更新评论列表后，关闭键盘,清空edittext
             editText_comment.setText(null);
@@ -122,6 +132,11 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
             intent.setAction(MyApplication.CIRCLEFRAGMENT_TAG);
             intent.putExtra("articleId", articleId);
             getActivity().sendBroadcast(intent);
+        } else if (id == Constant.ID.DELETE_TIESHU) {//删除帖书
+            Intent intent = new Intent();
+            intent.setAction(MyApplication.CIRCLEFRAGMENT_DELETE);
+            getActivity().sendBroadcast(intent);
+            getActivity().onBackPressed();
         }
     }
 
@@ -156,7 +171,6 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
 
     @Override
     public void navigateToFragment(BaseFragment baseFragment, Bundle bundle) {
-
     }
 
     @Override
@@ -171,4 +185,5 @@ public class CircleDetailFragment extends BaseFragment<CirclePresenter> implemen
                 break;
         }
     }
+
 }

@@ -1,7 +1,6 @@
 package com.lxkj.xpp.legal.listener;
 
 import com.lxkj.xpp.legal.adapter.ItemViewHolder;
-import com.lxkj.xpp.legal.model.bean.CircleListBean;
 import com.lxkj.xpp.legal.model.bean.CommentsBean;
 
 /**
@@ -10,12 +9,20 @@ import com.lxkj.xpp.legal.model.bean.CommentsBean;
  */
 
 public interface IssueOrReplyDo {
-    /**
-     *
+    /**评论，回复评论之后要做的
      * @param viewHolder
      * @param type
      * @param acticleId
      * @param commentsBean
      */
     void issueorReply(ItemViewHolder viewHolder, int type, int acticleId, CommentsBean commentsBean);
+
+    /**
+     * 删除评论
+     *
+     * @param articleId
+     * @param commentId
+     * @param content
+     */
+    void deleteCommentDo(int articleId, int commentId, String content);
 }

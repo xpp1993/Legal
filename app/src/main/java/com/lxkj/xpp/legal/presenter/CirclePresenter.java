@@ -1,20 +1,25 @@
 package com.lxkj.xpp.legal.presenter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.lxkj.xpp.legal.app.MyApplication;
 import com.lxkj.xpp.legal.base.BaseMvpPresenter;
 import com.lxkj.xpp.legal.constant.Constant;
 import com.lxkj.xpp.legal.listener.CirCleCallBackListener;
+import com.lxkj.xpp.legal.listener.CircleListBroadcast;
 import com.lxkj.xpp.legal.listener.OnCommentEntityClickListener;
 import com.lxkj.xpp.legal.model.CircleModel;
 import com.lxkj.xpp.legal.model.bean.CircleDetailBean;
@@ -105,8 +110,9 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
             case Constant.ID.LOAD_CIRCLE://加载帖书列表
                 if (isSuccessFull) {
                     if (mView != null) {
-                        mView.onShowToast("加载完成", Constant.ID.LOAD_CIRCLE);
+                        //mView.onShowToast("加载完成", Constant.ID.LOAD_CIRCLE);
                         Bundle circleListData = new Bundle();
+                        //circleListData.putInt("pageNo", circleListBean.getData().getPageNo());
                         circleListData.putSerializable("circleListBean", circleListBean);
                         if (bundle != null) {
                             circleListData.putInt("code", bundle.getInt("code"));
@@ -145,6 +151,37 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
                     mView.updataUI(circleDetailBean_data, Constant.ID.PUBLIS_DETAIL);
                 }
                 break;
+            case Constant.ID.DELETE_COMMENT://删除评论
+                if (isSuccessFull) {
+                    ToastUtlis.showToastInUIThread("删除成功");
+                    //在请求一遍帖数详情
+                    int articleId = bundle.getInt("articleId");
+                    loadPublishDetail(context, articleId);
+                } else {
+                    ToastUtlis.showToastInUIThread(msg);
+                }
+                break;
+            case Constant.ID.DELETE_TIESHU://删除帖书
+                if (isSuccessFull) {
+                    ToastUtlis.showToastInUIThread("删除成功");
+                    mView.updataUI(null, Constant.ID.DELETE_TIESHU);
+                } else {
+                    ToastUtlis.showToastInUIThread(msg);
+                }
+                break;
+//            case Constant.ID.SINGLE_USER_ARTICLE://获取单个用户的帖书列表
+//                if (isSuccessFull) {
+//                    Bundle circleListData = new Bundle();
+//                    circleListData.putSerializable("circleListBean", circleListBean);
+//                    if (bundle != null) {
+//                        circleListData.putInt("code", bundle.getInt("code"));
+//                        Log.e("iPresenter", "code=" + bundle.getInt("code"));
+//                    }
+//                    mView.updataUI(circleListData, Constant.ID.LOAD_CIRCLE);
+//                } else {
+//                    ToastUtlis.showToastInUIThread(msg);
+//                }
+//                break;
         }
     }
 
@@ -203,6 +240,21 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
     }
 
     /**
+     * 删除评论
+     *
+     * @param context
+     * @param articleId
+     * @param commentId
+     */
+    public void deleteComment(Context context, int articleId, int commentId) {
+        mModel.deleteComment(context, articleId, commentId, this);
+    }
+
+    public void deteteTieshu(Context context, int articleId) {
+        mModel.deleteTieshu(context, articleId, this);
+    }
+
+    /**
      * 获取帖书详情页
      *
      * @param context
@@ -234,6 +286,22 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
     }
 
     /**
+     * 获取单个用户的帖书列表
+     *
+     * @param context
+     * @param pageSize
+     * @param pageNo
+     * @param uid
+     */
+    public void getSingleUserArticles(Context context, int pageSize, int pageNo, String uid) {
+        try {
+            mModel.getSingleUserArticles(context, pageSize, pageNo, uid, this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 设置Circleitem的UI
      *
      * @param bundle
@@ -246,7 +314,7 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
      * @param messageGroup
      * @param maxImag
      */
-    public void setCircleDetailUI(Bundle bundle, CircleImageView headCircleImageView, MyGridlayout imageGridView, TextView nicknameTextView,
+    public void setCircleDetailUI(final FragmentActivity activity, Bundle bundle, CircleImageView headCircleImageView, MyGridlayout imageGridView, TextView nicknameTextView,
                                   TextView whatAgoTextView, TextView messageTextView, ImageView commentImageView, TextView commentCountTextView,
                                   MessageGroup messageGroup, int maxImag) {
         final CircleDetailBean circleDetailBean = (CircleDetailBean) bundle.getSerializable("circleDetailBean");
@@ -298,7 +366,7 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
 
                 @Override
                 public void onFromClicked(CommentsBean commentsBean) {
-                   // Toast.makeText(context, "onFromClicked:" + commentsBean, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, "onFromClicked:" + commentsBean, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -308,16 +376,22 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
 
                 @Override
                 public void onMessageClicked(CommentsBean commentsBean) {//回复评论
-                    Bundle reply_bundle = new Bundle();
-                    reply_bundle.putInt("ObjId", circleDetailBean.getData().getObjId());
-                    reply_bundle.putSerializable("commentsBean", commentsBean);
-                    mView.publishComment(reply_bundle, Constant.appFinal.replay);
+                    if (commentsBean.getDiscussUid().equals(CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.uid))) {
+                        String content = commentsBean.getContent().trim();
+                        showDialog(activity, circleDetailBean.getData().getObjId(), commentsBean.getObjId(), content);
+                    } else {
+                        Bundle reply_bundle = new Bundle();
+                        reply_bundle.putInt("ObjId", circleDetailBean.getData().getObjId());
+                        reply_bundle.putSerializable("commentsBean", commentsBean);
+                        mView.publishComment(reply_bundle, Constant.appFinal.replay);
+                    }
                     //IssueOrReplyDo(context, Constant.appFinal.issue, circleDetailBean.getData().getObjId(), commentsBean, "");
                 }
 
                 @Override
                 public void onMessageLongClicked(CommentsBean commentsBean) {
-                    Toast.makeText(context, "onMessageLongClicked:" + commentsBean, Toast.LENGTH_SHORT).show();
+                    showDialog(activity, circleDetailBean.getData().getObjId(), commentsBean.getObjId(), commentsBean.getContent().trim());
+                    //Toast.makeText(context, "onMessageLongClicked:" + commentsBean, Toast.LENGTH_SHORT).show();
                 }
             });
             messageGroup.setVisibility(View.VISIBLE);
@@ -326,6 +400,25 @@ public class CirclePresenter extends BaseMvpPresenter<CircleView, CircleModel> i
         } else {
             messageGroup.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 删除评论或者复制
+     */
+    public void showDialog(FragmentActivity activity, final int articleId, final int commentId, final String content) {
+        final CharSequence[] items = {"删除", "复制"};
+        AlertDialog dlg = new AlertDialog.Builder(activity)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        // 这里item是根据选择的方式，
+                        if (item == 0) {//删除
+                            deleteComment(CommonUtils.getContext(), articleId, commentId);
+                        } else {//复制
+                            CommonUtils.copyMessage(context, content);
+                        }
+                    }
+                }).create();
+        dlg.show();
     }
 
     /**

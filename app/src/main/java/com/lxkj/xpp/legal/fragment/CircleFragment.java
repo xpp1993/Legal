@@ -53,7 +53,6 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     private boolean isRefresh;
     private final int REQUIRE_CODE_MESSAGE_NEW = 0X01, REQUIRE_CODE_MESSAGE_OLD = 0X02;
     private ItemViewHolder itemViewHolder;
-    private ItemViewHolder viewHolder;
     @BindView(R.id.commit_input_rl)
     RelativeLayout mCommitRelativeLayout;
     @BindView(R.id.commit_et)
@@ -62,10 +61,11 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     private CommentsBean commentsBean;
     int comment_type;
     private CircleListBroadcast circleListBroadcast;
+    int position;
 
     @Override
     protected void initWidgets() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(CommonUtils.getContext()));
+        // mRecyclerView.setLayoutManager(new LinearLayoutManager(CommonUtils.getContext()));
         mCommitRelativeLayout.findViewById(R.id.commit_bt).setOnClickListener(this);
         initAdapter();
     }
@@ -110,23 +110,33 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
      */
     @Override
     public void updataUI(Bundle bundle, int id) {
-        if (bundle == null)
-            return;
-        itemViewHolder = viewHolder;
         switch (id) {
             case Constant.ID.PUBLIS_DETAIL://获取帖书详情
+                if (bundle == null)
+                    return;
                 CircleDetailBean circleDetailBean = (CircleDetailBean) bundle.getSerializable("circleDetailBean");
+                //page = bundle.getInt("pageNo");
                 int commentNumber = circleDetailBean.getData().getCommentNum();
                 List<CommentsBean> commentsBeen = circleDetailBean.getData().getComments();
+                if (itemViewHolder == null) {
+                    itemViewHolder = itemAdapter.getViewHolder();
+                }
                 itemViewHolder.commentCountTextView.setText(commentNumber + "评论");
-                itemViewHolder.messageGroup.setVisibility(View.VISIBLE);
-                itemViewHolder.messageGroup.setMaxLineNumber(10);//手动设置最多可以显示多少条评论
-                itemViewHolder.messageGroup.refresh(commentsBeen);
+                if (commentsBeen != null && commentsBeen.size() > 0) {
+                    itemViewHolder.messageGroup.setVisibility(View.VISIBLE);
+                    itemViewHolder.messageGroup.setMaxLineNumber(10);//手动设置最多可以显示多少条评论
+                    itemViewHolder.messageGroup.refresh(commentsBeen);
+                } else {
+                    itemViewHolder.messageGroup.setVisibility(View.GONE);
+                }
+                itemAdapter.notifyDataSetChanged();
                 CommonUtils.closeKeyMap(getActivity());//评论后更新评论评论列表后，关闭键盘，隐藏评论Relativelayout,清空edittext
                 editText_comment.setText(null);
                 mCommitRelativeLayout.setVisibility(View.GONE);
                 break;
             case Constant.ID.LOAD_CIRCLE://加载朋友圈
+                if (bundle == null)
+                    return;
                 CircleListBean circleListBean = (CircleListBean) bundle.getSerializable("circleListBean");
                 int code = bundle.getInt("code");
                 totalPage = circleListBean.getData().getTotalPage();
@@ -162,13 +172,34 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
-        itemAdapter = new CircleListItemAdapter(CommonUtils.getContext(), issueOrReplyDo);
+        itemAdapter = new CircleListItemAdapter(CommonUtils.getContext(), new IssueOrReplyDo() {
+            //评论或者回复评论
+            @Override
+            public void issueorReply(ItemViewHolder viewHolder, int type, int acticleId, CommentsBean commentsBean) {
+                itemViewHolder = viewHolder;
+                comment_type = type;
+                CircleFragment.this.articleId = acticleId;
+                CircleFragment.this.commentsBean = commentsBean;
+                //弹出输入框,打开键盘
+                editText_comment.requestFocus();
+                mCommitRelativeLayout.setVisibility(View.VISIBLE);
+                CommonUtils.openKeyboard(getActivity());
+            }
+
+            //删除评论或者复制
+            @Override
+            public void deleteCommentDo(int articleId, int commentId, String content) {
+                mPresenter.showDialog(getActivity(), articleId, commentId, content);
+            }
+        });
         itemAdapter.setOnItemClickListener(new OnItemClickListener<CircleListBean.DataBean.DataListBean>() {
             @Override
-            public void onClick(CircleListBean.DataBean.DataListBean item) {
+            public void onClick(CircleListBean.DataBean.DataListBean item, int position) {
                 //跳转到详情页
                 Bundle bundle = new Bundle();
+                bundle.putString("uid", item.getUid());
                 bundle.putInt("articleId", item.getObjId());
+                CircleFragment.this.position = position;
                 EventBus.getDefault().post(new NavFragmentEvent(new CircleDetailFragment(), bundle));
             }
         });
@@ -190,25 +221,6 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
     }
 
     /**
-     * 评论、回复后需要做的事情
-     */
-    private IssueOrReplyDo issueOrReplyDo = new IssueOrReplyDo() {
-        @Override
-        public void issueorReply(ItemViewHolder viewHolder, int type, int acticleId, CommentsBean commentsBean) {
-            CircleFragment.this.viewHolder = viewHolder;
-            itemViewHolder = CircleFragment.this.viewHolder;
-            comment_type = type;
-            CircleFragment.this.articleId = acticleId;
-            CircleFragment.this.commentsBean = commentsBean;
-            //弹出输入框,打开键盘
-            editText_comment.requestFocus();
-            mCommitRelativeLayout.setVisibility(View.VISIBLE);
-            CommonUtils.openKeyboard(getActivity());
-        }
-
-    };
-
-    /**
      * 刷新
      */
     @Override
@@ -216,10 +228,10 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         if (!isRefresh) {
             isRefresh = true;
             page = 1;
-            mPresenter.loadCircleData(CommonUtils.getContext(), REQUIRE_CODE_MESSAGE_NEW, 5, page);
+            mPresenter.loadCircleData(CommonUtils.getContext(), REQUIRE_CODE_MESSAGE_NEW, 10, page);
         }
-    }
 
+    }
 
     /**
      * 加载更多
@@ -261,7 +273,14 @@ public class CircleFragment extends BaseFragment<CirclePresenter> implements Cir
         } catch (Exception e) {
             e.printStackTrace();
         }
-        circleListBroadcast = new CircleListBroadcast(mPresenter);
+        circleListBroadcast = new CircleListBroadcast(mPresenter, new CircleListBroadcast.RefreshAfetrDelete() {
+            @Override
+            public void refresh() {
+                if (itemAdapter != null) {
+                    itemAdapter.refresh(position);
+                }
+            }
+        });
         filter.addAction(MyApplication.CIRCLEFRAGMENT_TAG);
         getActivity().registerReceiver(circleListBroadcast, filter);
     }

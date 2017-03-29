@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mgl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/px34dp"
+    android:background="#FBFCFD"
+    android:paddingBottom="@dimen/px50dp">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/px40dp"
+        android:layout_marginTop="@dimen/px16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/single_item_what_ago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/px40dp"
+            android:maxLines="1"
+            android:text="1天前"
+            android:textColor="#d3d3d3"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/single_item_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/px20dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="@dimen/px20dp"
+            android:maxLines="3"
+            android:textColor="#666666"
+            android:textSize="15sp" />
+
+        <com.lxkj.xpp.legal.widget.adaptivedgridview.MyGridlayout
+            android:id="@+id/single_item_image_gv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            mgl:itemMarginBottom="@dimen/px38dp"
+            mgl:itemMarginLeft="2dp"
+            mgl:itemMarginRight="2dp" />
+
+        <TextView
+            android:id="@+id/single_item_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="52 评论"
+            android:textColor="#d3d3d3"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

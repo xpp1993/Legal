@@ -80,6 +80,10 @@ public interface Constant {
         int REAL_PAGE_CONSTANT = 0x11;//平台常量获取
         int LOAD_CIRCLE = 0x12;//加载帖书页
         int PUBLIS_DETAIL = 0x13;//帖书详情
+        int DELETE_COMMENT=0x14;//删除评论
+        int DELETE_TIESHU=0x15;//删除帖书
+        int USERINFO=0x16;//用户信息
+        int  SINGLE_USER_ARTICLE=0x17;//获取单个用户的帖书列表信息
         // int ISSUE_REPLAY = 0x13;//评论，发表评论
         String friend_uuid = "friend_uuid";
     }
@@ -106,7 +110,8 @@ public interface Constant {
         String ISSUE_REPLAY = BASE_URL + "legal/api/article/discuss";//评论，回复评论
         String PUBLISH_DETAIL = BASE_URL + "legal/api/article/article_detail";//帖书详情
         String DELETE_COMMENT = BASE_URL + "legal/api/article/delete_comment";//删除评论，commentId
-        String DELETE_TIESHU = BASE_URL + "legal/api/article/delete_article?articleId=48";//删除帖书，articleId
-        String USER_INFO=BASE_URL+"legal/api/power/common/user_info?uid=1010002";
+        String DELETE_TIESHU = BASE_URL + "legal/api/article/delete_article";//删除帖书，articleId
+        String USER_INFO=BASE_URL+"legal/api/power/common/user_info";
+        String SINGLE_USER_ARTICLE=BASE_URL+"legal/api/article/user_articles";//获取单个用户贴书列表（含用户自己）、后台自动识别
     }
 }

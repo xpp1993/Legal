@@ -98,20 +98,28 @@ public class MeFragment extends BaseFragment<IPresenter> implements IView {
         return R.layout.fragment_me;
     }
 
-    @OnClick({R.id.fragment_me_editor, R.id.fragment_me_set, R.id.fragment_me_user_feedback, R.id.fragment_me_to_real, R.id.fragment_me_to_seniority})
+    @OnClick({R.id.fragment_me_editor, R.id.my_state, R.id.fragment_me_set, R.id.fragment_me_user_feedback, R.id.fragment_me_to_real, R.id.fragment_me_to_seniority})
     void click(View view) {
         switch (view.getId()) {
             case R.id.fragment_me_editor://跳转到编辑个人资料页面
                 EventBus.getDefault().post(new NavFragmentEvent(new SelfFragment()));
+                break;
+            case R.id.my_state://我的动态
+                EventBus.getDefault().post(new NavFragmentEvent(new SingleCircleFragment()));
+                break;
             case R.id.fragment_me_set://跳转到设置页面
                 EventBus.getDefault().post(new NavFragmentEvent(new ShezhiFragment()));
+                break;
             case R.id.fragment_me_user_feedback://跳转到用户反馈页面
                 EventBus.getDefault().post(new NavFragmentEvent(new FeedBackFragment()));
+                break;
             case R.id.fragment_me_to_real://实名认证页面
                 EventBus.getDefault().post(new NavFragmentEvent(new IDRegistFragment()));
+                break;
             case R.id.fragment_me_to_seniority://跳转到资历认证页面
                 EventBus.getDefault().post(new NavFragmentEvent(new FragmentSeniority()));
                 break;
+
             default:
                 break;
         }

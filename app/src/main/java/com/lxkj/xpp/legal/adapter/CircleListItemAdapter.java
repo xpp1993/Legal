@@ -1,6 +1,7 @@
 package com.lxkj.xpp.legal.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.lxkj.xpp.legal.listener.IssueOrReplyDo;
 import com.lxkj.xpp.legal.listener.OnCommentEntityClickListener;
 import com.lxkj.xpp.legal.model.bean.CircleListBean;
 import com.lxkj.xpp.legal.model.bean.CommentsBean;
+import com.lxkj.xpp.legal.utils.CommonUtils;
 import com.lxkj.xpp.legal.widget.adaptivedgridview.MyGridLayoutCallBack;
 import com.lxkj.xpp.legal.widget.adaptivedgridview.SmartDecorator;
 
@@ -27,12 +29,14 @@ import java.util.List;
 public class CircleListItemAdapter extends RecyclerBaseAdapter<CircleListBean.DataBean.DataListBean, ItemViewHolder> {
     private Context context;
     private IssueOrReplyDo issueOrReplyDo;
+    private ItemViewHolder viewHolder;
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = inflateItemView(parent, R.layout.comment_item);
         return new ItemViewHolder(itemView);
     }
+
     public CircleListItemAdapter(Context context, IssueOrReplyDo issueOrReplyDo) {
         this.context = context;
         this.issueOrReplyDo = issueOrReplyDo;
@@ -43,8 +47,13 @@ public class CircleListItemAdapter extends RecyclerBaseAdapter<CircleListBean.Da
         super.addItems(items);
     }
 
+    public ItemViewHolder getViewHolder() {
+        return viewHolder;
+    }
+
     @Override
     protected void bindDataToItemView(final ItemViewHolder holder, final CircleListBean.DataBean.DataListBean item) {
+        viewHolder = holder;
         Glide.with(context).load(item.getUserHeadImg()).into(holder.headCircleImageView);
         holder.nicknameTextView.setText(item.getUserNickName());
         holder.whatAgoTextView.setText(item.getPublishTime());
@@ -74,16 +83,16 @@ public class CircleListItemAdapter extends RecyclerBaseAdapter<CircleListBean.Da
         } else {
             holder.imageGridView.setVisibility(View.GONE);
         }
-        holder.commentCountTextView.setText((item.getComments() == null ? 0 : item.getCommentNum()) + " 评论");
+        holder.commentCountTextView.setText(item.getCommentNum() + " 评论");
         holder.commentImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//发表评论
                 if (issueOrReplyDo != null) {
-                    issueOrReplyDo.issueorReply(holder,Constant.appFinal.issue,item.getObjId(),null);
+                    issueOrReplyDo.issueorReply(holder, Constant.appFinal.issue, item.getObjId(), null);
                 }
             }
         });
-        if (item.getComments() != null && item.getComments().size() > 0) {
+        if (item.getComments() != null && item.getComments().size() > 0 || item == null) {
             holder.messageGroup.setOnEntityClickListener(new OnCommentEntityClickListener() {
 
                 @Override
@@ -98,14 +107,25 @@ public class CircleListItemAdapter extends RecyclerBaseAdapter<CircleListBean.Da
 
                 @Override
                 public void onMessageClicked(CommentsBean commentsBean) {//回复评论
-                    if (issueOrReplyDo != null) {
-                        issueOrReplyDo.issueorReply(holder,Constant.appFinal.replay,item.getObjId(),commentsBean);
+                    if (!commentsBean.getDiscussUid().equals(CommonUtils.getPreference().getString(context, Constant.LOGIN.uid))) {
+                        if (issueOrReplyDo != null) {
+                            issueOrReplyDo.issueorReply(holder, Constant.appFinal.replay, item.getObjId(), commentsBean);
+                        }
+                    } else {
+                        if (issueOrReplyDo != null) {//删除评论
+                            issueOrReplyDo.deleteCommentDo(item.getObjId(), commentsBean.getObjId(), commentsBean.getContent().trim());
+                        }
                     }
+
                 }
 
                 @Override
                 public void onMessageLongClicked(CommentsBean commentsBean) {
-                    Toast.makeText(context, "onMessageLongClicked:" + commentsBean, Toast.LENGTH_SHORT).show();
+                    String uid = CommonUtils.getPreference().getString(context, Constant.LOGIN.uid);
+                    if (commentsBean.getDiscussUid().equals(uid) || item.getUid().equals(uid))//长按删除自己的评论、或者是自己说说里的说有评论
+                        if (issueOrReplyDo != null) {//删除评论
+                            issueOrReplyDo.deleteCommentDo(item.getObjId(), commentsBean.getObjId(), commentsBean.getContent().trim());
+                        }
                 }
             });
             holder.messageGroup.setVisibility(View.VISIBLE);

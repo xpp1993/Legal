@@ -1,6 +1,7 @@
 package com.lxkj.xpp.legal.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
  * @param <V> ViewHolder类型
  */
 public abstract class RecyclerBaseAdapter<D, V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> {
+    private int position;
     /**
      * RecyclerView中的数据集
      */
@@ -34,19 +36,26 @@ public abstract class RecyclerBaseAdapter<D, V extends RecyclerView.ViewHolder> 
     }
 
     protected D getItem(int position) {
+        this.position = position;
+        //Log.e("xpp3-29", position + "");
         return mDataSet.get(position);
     }
 
     public void addItems(List<D> items) {
         //移除已经存在的的数据避免重复
-         items.removeAll(mDataSet);
+        items.removeAll(mDataSet);
         //添加新数据
         mDataSet.addAll(items);
         notifyDataSetChanged();
     }
 
-    public void clearDataSet(){
+    public void clearDataSet() {
         mDataSet.clear();
+    }
+
+    public void refresh(int position) {
+        mDataSet.remove(getItem(position));
+        notifyDataSetChanged();
     }
 
     /**
@@ -64,6 +73,7 @@ public abstract class RecyclerBaseAdapter<D, V extends RecyclerView.ViewHolder> 
     }
 
     public void setOnItemClickListener(OnItemClickListener<D> mItemClickListener) {
+
         this.mItemClickListener = mItemClickListener;
     }
 
@@ -73,12 +83,13 @@ public abstract class RecyclerBaseAdapter<D, V extends RecyclerView.ViewHolder> 
      * @param viewHolder
      * @param item
      */
-    protected void setupItemViewClickListener(V viewHolder, final D item) {
+    protected void setupItemViewClickListener(final V viewHolder, final D item) {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mItemClickListener != null) {
-                    mItemClickListener.onClick(item);
+                    if (viewHolder.getLayoutPosition() > 0)
+                        mItemClickListener.onClick(item, viewHolder.getLayoutPosition() - 1);
                 }
             }
         });

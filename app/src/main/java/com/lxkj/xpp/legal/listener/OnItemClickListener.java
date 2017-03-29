@@ -5,5 +5,5 @@ package com.lxkj.xpp.legal.listener;
  */
 
 public interface OnItemClickListener<T> {
-    public void onClick(T item);
+    public void onClick(T item,int position);
 }

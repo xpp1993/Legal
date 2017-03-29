@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hyphenate="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/single_circle_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        hyphenate:titleBarLeftImage="@mipmap/back"
+        hyphenate:titleBarTitle="我的动态" />
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/single_circle_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/single_circle_title_bar"
+        android:layout_marginTop="@dimen/px34dp" />
+</RelativeLayout>

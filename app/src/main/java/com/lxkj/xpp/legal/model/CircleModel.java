@@ -3,26 +3,21 @@ package com.lxkj.xpp.legal.model;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.lxkj.xpp.legal.R;
-import com.lxkj.xpp.legal.adapter.CircleListItemAdapter;
-import com.lxkj.xpp.legal.adapter.ItemViewHolder;
 import com.lxkj.xpp.legal.base.BaseMvpModel;
 import com.lxkj.xpp.legal.constant.Constant;
 import com.lxkj.xpp.legal.listener.CirCleCallBackListener;
 import com.lxkj.xpp.legal.model.bean.CircleDetailBean;
 import com.lxkj.xpp.legal.model.bean.CircleListBean;
 import com.lxkj.xpp.legal.model.bean.CommentsBean;
-import com.lxkj.xpp.legal.model.bean.LoginMessage;
+import com.lxkj.xpp.legal.model.bean.UserInfoBean;
 import com.lxkj.xpp.legal.utils.CommonUtils;
 import com.lxkj.xpp.legal.utils.ToastUtlis;
 import com.lxkj.xpp.legal.utils.okhttp.OkHttpUtils;
 import com.lxkj.xpp.legal.utils.okhttp.callback.GenericsCallback;
 import com.lxkj.xpp.legal.utils.okhttp.callback.JsonGenericsSerializator;
-import com.lxkj.xpp.legal.utils.okhttp.callback.StringCallback;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -152,8 +147,8 @@ public class CircleModel implements BaseMvpModel {
     public void IssueOrReplay(Context context, int type, int articleId, CommentsBean commentsBean, String content, final CirCleCallBackListener listener) throws JSONException {
         String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
         String params = null;
-        final Bundle bundle=new Bundle();
-        bundle.putInt("articleId",articleId);
+        final Bundle bundle = new Bundle();
+        bundle.putInt("articleId", articleId);
         if (type == Constant.appFinal.issue) {//评论
             params = CommonUtils.getParameterJsonResult(new String[]{"type", "articleId", "content"},
                     Constant.appFinal.issue, articleId, content);
@@ -189,11 +184,160 @@ public class CircleModel implements BaseMvpModel {
 
     /**
      * 删除评论
+     *
+     * @param context
+     * @param articleId
+     * @param commentId
+     * @param listener
+     */
+    public void deleteComment(Context context, int articleId, int commentId, final CirCleCallBackListener listener) {
+        String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
+        final Bundle bundle = new Bundle();
+        bundle.putInt("articleId", articleId);
+        OkHttpUtils
+                .get()
+                .url(Constant.URL.DELETE_COMMENT)
+                .id(Constant.ID.DELETE_COMMENT)
+                .addHeader("user_token", token)
+                .addParams("commentId", String.valueOf(commentId))
+                .build()
+                .execute(new GenericsCallback<CircleDetailBean>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
+
+                    @Override
+                    public void onResponse(CircleDetailBean response, int id) {
+                        listener.onSuccess(response, bundle, id);
+                    }
+
+                });
+    }
+
+    /**
+     * 删除帖书
+     *
      * @param context
      * @param articleId
      * @param listener
      */
-    public void deleteComment(Context context, int articleId, final CirCleCallBackListener listener){
+    public void deleteTieshu(Context context, int articleId, final CirCleCallBackListener listener) {
+        String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
+        OkHttpUtils
+                .get()
+                .url(Constant.URL.DELETE_TIESHU)
+                .id(Constant.ID.DELETE_TIESHU)
+                .addHeader("user_token", token)
+                .addParams("articleId", String.valueOf(articleId))
+                .build()
+                .execute(new GenericsCallback<CircleDetailBean>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
 
+                    @Override
+                    public void onResponse(CircleDetailBean response, int id) {
+                        listener.onSuccess(response, null, id);
+                    }
+
+                });
+    }
+
+    /**
+     * 获取个人面板信息
+     *
+     * @param context
+     * @param uid
+     * @param listener
+     */
+    public void getUserInfo(Context context, int uid, final CirCleCallBackListener listener) {
+        String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
+        OkHttpUtils
+                .get()
+                .url(Constant.URL.USER_INFO)
+                .id(Constant.ID.USERINFO)
+                .addHeader("user_token", token)
+                .addParams("uid", String.valueOf(uid))
+                .build()
+                .execute(new GenericsCallback<UserInfoBean>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
+
+                    @Override
+                    public void onResponse(UserInfoBean response, int id) {
+                        listener.onSuccess(response, null, id);
+                    }
+
+                });
+    }
+
+    /**
+     * 好友关系
+     *
+     * @param context
+     * @param uid
+     * @param friendUid
+     * @param relation
+     * @param listener
+     */
+    public void deleteFriends(Context context, String uid, String friendUid, int relation, final CirCleCallBackListener listener) throws JSONException {
+        String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
+        String params = CommonUtils.getParameterJsonResult(new String[]{"friendUid", "uid", "relation"}, friendUid, uid, relation);
+        OkHttpUtils
+                .postString()
+                .url(Constant.URL.IM_RELATION)
+                .content(params)
+                .id(relation)
+                .mediaType(Constant.appFinal.MEDIA_TYPE_JSON)
+                .addHeader("user_token", token)
+                .build()
+                .execute(new GenericsCallback<CircleListBean>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
+
+                    @Override
+                    public void onResponse(CircleListBean circleListBean, int id) {
+                        listener.onSuccess(circleListBean, null, id);
+                    }
+                });
+    }
+
+    /**
+     * 获取单个用户贴书列表（含用户自己）、后台自动识别
+     *
+     * @param context
+     * @param pageSize
+     * @param pageNo
+     * @param uid
+     * @param listener
+     */
+    public void getSingleUserArticles(Context context, int pageSize, int pageNo, String uid, final CirCleCallBackListener listener) throws JSONException {
+        String token = CommonUtils.getPreference().getString(CommonUtils.getContext(), Constant.LOGIN.user_token);
+        String params = CommonUtils.getParameterJsonResult(new String[]{"pageSize", "pageNo", "uid"}, pageSize, pageNo, uid);
+        OkHttpUtils
+                .postString()
+                .url(Constant.URL.SINGLE_USER_ARTICLE)
+                .content(params)
+                .id(Constant.ID.LOAD_CIRCLE)
+                .mediaType(Constant.appFinal.MEDIA_TYPE_JSON)
+                .addHeader("user_token", token)
+                .build()
+                .execute(new GenericsCallback<CircleListBean>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        listener.onFail(e.getMessage(), id);
+                    }
+
+                    @Override
+                    public void onResponse(CircleListBean circleListBean, int id) {
+                        listener.onSuccess(circleListBean, null, id);
+                    }
+                });
     }
 }
